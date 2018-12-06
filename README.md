@@ -1,6 +1,6 @@
 # teraherz
 Name
-====
+テラヘルツ波を用いた識別タグに関する研究
 
 Overview
 
@@ -12,22 +12,5 @@ Overview
 2018/12/06現在
 SVM,kNN,PCA-SVM,SVRのプログラムを書きました。
 
-## Demo
 
-## VS. 
 
-## Requirement
-
-## Usage
-
-## Install
-
-## Contribution
-
-## Licence
-
-[MIT](https://github.com/tcnksm/tool/blob/master/LICENCE)
-
-## Author
-
-[tcnksm](https://github.com/tcnksm)
