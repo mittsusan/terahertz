@@ -1,8 +1,6 @@
-# teraherz
-Name
-テラヘルツ波を用いた識別タグに関する研究
+### テラヘルツ波を用いた識別タグに関する研究
 
-Overview
+### Overview
 
 ## Description
 
