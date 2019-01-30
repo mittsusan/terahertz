@@ -17,18 +17,19 @@ for i in range(1,4):
             if flag == 0:
                 x_all = x
                 flag += 1
-            x_all = np.append(x_all, x, axis=0)
+            else:
+                x_all = np.append(x_all, x, axis=0)
             y_all.append(i)
         except FileNotFoundError as e:
             print(e)
 #train_test_split(特徴量,目的関数,1つの厚さにおけるtrainデータの数)
 train_x,train_y,test_x,test_y = train_test_split(x_all,y_all,1)
 
-print(train_x)
-print(train_y)
-print(test_x)
-print(test_y)
-#print(x_all)
+#print(train_x)
+#print(train_y)
+#print(test_x)
+#print(test_y)
+print(x_all)
 #print(y_all)
 #referenceのカラーコード
 #カラーコードのタグの数width=4,length=4の場合16個のタグに対応
@@ -44,22 +45,7 @@ colorcode(best_pred,width,length)
 # PCA-SVM
 transformed, targets = pCA(x_all, y_all)
 
-train_x_pca = np.empty((0, 2), int)
-test_x_pca = np.empty((0, 2), int)
-# print(transformed.shape)
-print(targets)
+train_x_pca,train_y_pca,test_x_pca,test_y_pca = train_test_split(transformed,targets,1)
 
-for i in range(0, 12):
-    if i == 0 or i == 4 or i == 8:
-        print(i)
-        print(transformed[i])
-        train_x_pca = np.append(train_x_pca, np.array([transformed[i]]), axis=0)
-    else:
-        test_x_pca = np.append(test_x_pca, np.array([transformed[i]]), axis=0)
-
-# print(train_x_pca)
-# print(train_y)
-# print(test_x_pca)
-# print(test_y)
-best_pred = svm(train_x_pca, train_y, test_x_pca, test_y)
-colorcode(best_pred, 3, 3)
+best_pred = svm(train_x_pca, train_y_pca, test_x_pca, test_y_pca)
+colorcode(best_pred, 4, 4)

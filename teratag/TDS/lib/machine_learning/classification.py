@@ -72,12 +72,14 @@ def pCA(x_all, y_all):
     pca.fit(features)
     # 分析結果を元にデータセットを主成分に変換する
     transformed = pca.fit_transform(features)
+    #print(transformed.shape)
+    #print(len(targets))
     # print(transformed)
     # 主成分をプロットする
     for label in np.unique(targets):
         plt.scatter(transformed[targets == label, 0],
                     transformed[targets == label, 1], label=label)
-    plt.legend(loc='uppper right',
+    plt.legend(loc='upper right',
                bbox_to_anchor=(1.05, 0.5, 0.5, .100),
                borderaxespad=0., )
     plt.title('principal component')

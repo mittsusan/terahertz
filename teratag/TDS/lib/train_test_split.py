@@ -18,11 +18,10 @@ def train_test_split(x_all,y_all,train_number):
             # trainを追加するための処理
             if flag_train == 0:
                 train_x = i
-                train_y.append(j)
                 flag_train += 1
             else:
                 train_x = np.append(train_x,i,axis=0)
-                train_y.append(j)
+            train_y.append(j)
             number += 1
             y_save = j
         #train_numberの数だけ左からtrainデータを取る。
@@ -35,12 +34,11 @@ def train_test_split(x_all,y_all,train_number):
         else:
             if flag_test == 0:
                 test_x = i
-                test_y.append(j)
                 flag_test += 1
 
             else:
                 test_x = np.append(test_x,i,axis=0)
-                test_y.append(j)
+            test_y.append(j)
 
             y_save = j
     return train_x,train_y,test_x,test_y
