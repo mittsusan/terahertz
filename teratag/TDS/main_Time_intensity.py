@@ -4,16 +4,13 @@ from TDS.lib.train_test_split import train_test_split
 from TDS.lib.machine_learning.classification import svm,kNN,pCA
 from TDS.lib.visualization import colorcode
 
-#refrenceデータを読み込む。
-#ここでの実行のは空の行列(x_all)を取ってくるため。
-#x,x_all = allread('/Users/ryoya/kawaseken/20190123/2019_0123_ref_1.txt')
 y_all = []
 flag = 0
 #mainデータを読み込む。
 for i in range(1,4):
     for j in range(1,6):
         try:
-            x,x_empty = allread('/Users/ryoya/kawaseken/20190123/2019_0123_{0}mm_{1}.txt'.format(i,j))
+            x = allread('/Users/ryoya/kawaseken/20190123/2019_0123_{0}mm_{1}.txt'.format(i,j)).Time_intensity()
             if flag == 0:
                 x_all = x
                 flag += 1
