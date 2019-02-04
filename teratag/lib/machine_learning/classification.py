@@ -78,10 +78,10 @@ def pCA(x_all, y_all):
     # 主成分をプロットする
     for label in np.unique(targets):
         plt.scatter(transformed[targets == label, 0],
-                    transformed[targets == label, 1], label=label)
+                    transformed[targets == label, 1], label='{}mm'.format(label*0.5))
     plt.legend(loc='upper right',
-               bbox_to_anchor=(1.05, 0.5, 0.5, .100),
-               borderaxespad=0., )
+               bbox_to_anchor=(1,1),
+               borderaxespad=0.5,fontsize = 10)
     plt.title('principal component')
     plt.xlabel('pc1')
     plt.ylabel('pc2')

@@ -1,8 +1,8 @@
 import numpy as np
-from TDS.lib.TDS_read import allread
-from TDS.lib.train_test_split import train_test_split
-from TDS.lib.machine_learning.classification import svm,kNN,pCA
-from TDS.lib.visualization import colorcode
+from lib.Allread import allread
+from lib.train_test_split import train_test_split
+from lib.machine_learning.classification import svm,kNN,pCA
+from lib.visualization import colorcode
 
 y_all = []
 flag = 0
@@ -10,7 +10,7 @@ flag = 0
 for i in range(1,4):
     for j in range(1,6):
         try:
-            x = allread('/Users/ryoya/kawaseken/20190123/2019_0123_{0}mm_{1}.txt'.format(i,j)).Time_intensity()
+            x = allread('reflectance').Time_intensity('/Users/ryoya/kawaseken/20190123/2019_0123_{0}mm_{1}.txt'.format(i,j))
             if flag == 0:
                 x_all = x
                 flag += 1
@@ -45,4 +45,4 @@ transformed, targets = pCA(x_all, y_all)
 train_x_pca,train_y_pca,test_x_pca,test_y_pca = train_test_split(transformed,targets,1)
 
 best_pred = svm(train_x_pca, train_y_pca, test_x_pca, test_y_pca)
-colorcode(best_pred, 4, 4)
+colorcode(best_pred, width, length)
