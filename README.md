@@ -7,13 +7,21 @@
 
 ### 変更点
 2018/12/06  
-・SVM,kNN,PCA-SVM,SVRのプログラムを書きました。  
+・SVM,kNN,PCA-SVM,SVRのプログラムを作成。  
 
 2019/1/11  
-・developブランチにallreadの楽なものを作成しました。  
+・developブランチにallreadの楽なものを作成。  
 
 2019/1/30  
 ・teratagディレクトリに分類用のjupyter notebookファイルをpythonファイルに以降。  
 ・trainデータとtestデータの分割を数で分ける関数を作成。  
 ・時間領域の強度での識別に対応(TDS)。  
+
+2019/2/4  
+・is-TPGのファイルにも対応。  
+・グラフ化機能を追加。  
+・PCAを修復(int型を代入するようにした。)  
+・min-max-normalizationにも対応。  
+・周波数の選択機能を追加。  
+・カラーコード可視化機能を修正。  
 
