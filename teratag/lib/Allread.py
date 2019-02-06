@@ -63,7 +63,7 @@ class allread:
         self.df.iloc[:,0] = self.df.iloc[:,0]/df_ref.iloc[:,0]
         self.df = self.df[first:last]
 
-        #self.min_max_normalization()
+        self.min_max_normalization()
         #self.graph_Frequency_trans_reflect_is_TPG()
         self.graph_Frequency_trans_reflect_is_TPG_everymm()
         #print(self.df)
@@ -127,7 +127,6 @@ class allread:
         global df
         self.df.columns = [self.file[-5]]
         plt.style.use('ggplot')
-        print(thickness)
         if thickness != self.thickness:
             df = self.df
         else:
@@ -157,6 +156,6 @@ class allread:
 
     def drange(self, begin, end, step):
         n = begin
-        while n  <= end:
+        while n  < end+0.01:
             yield n
             n += step
