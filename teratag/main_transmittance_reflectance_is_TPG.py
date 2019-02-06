@@ -11,13 +11,17 @@ for i in range(1,5):
     i = i*0.5
     for j in range(1,5):
         try:
-            x = allread('reflectance').Frequency_trans_reflect_is_TPG('/Users/ryoya/kawaseken/20190201_fix/PE_{0}mm_{1}.txt'.format(i,j),
-                '/Users/ryoya/kawaseken/20190201/ref.txt',1.4,1.5)
+            x = allread('reflectance','{}mm'.format(i)).Frequency_trans_reflect_is_TPG('/Users/ryoya/kawaseken/20190201_fix/PE_{0}mm_{1}.txt'.format(i,j),
+                '/Users/ryoya/kawaseken/20190201/ref.txt',1.40,1.60)
+
             if flag == 0:
                 x_all = x
                 flag += 1
+
             else:
                 x_all = np.append(x_all, x, axis=0)
+
+
             #y_allの値がint出ないとsvm,pcaの可視化が上手くいかないので0.5mmの場合は*2などをして元に戻す。
             y_all.append(i*2)
         except FileNotFoundError as e:

@@ -5,13 +5,15 @@ import matplotlib.pyplot as plt
 from matplotlib import rcParams
 from sklearn import preprocessing
 rcParams.update({'figure.autolayout': True})
-
+thickness = ''
 
 class allread:
-    def __init__(self,method):
+    def __init__(self,method,thickness):
         #self.df = pd.read_table(file, engine='python')
         #self.file = file
         self.method = method
+        self.thickness = thickness
+
         #self.first_freq = first
         #self.last_freq = last
 # ファイルを読み込む。
@@ -61,9 +63,10 @@ class allread:
         self.df.iloc[:,0] = self.df.iloc[:,0]/df_ref.iloc[:,0]
         self.df = self.df[first:last]
 
-        self.min_max_normalization()
-        self.graph_Frequency_trans_reflect_is_TPG()
-        print(self.df)
+        #self.min_max_normalization()
+        #self.graph_Frequency_trans_reflect_is_TPG()
+        self.graph_Frequency_trans_reflect_is_TPG_everymm()
+        #print(self.df)
         for j in self.df.iloc[:,0]:
             x_list.append(j)
 
@@ -115,8 +118,30 @@ class allread:
         plt.xlabel('周波数[THz]')
         plt.ylabel(self.method)
         plt.title(self.file)
-        plt.show()
+        #plt.show()
 
+        return
+
+    def graph_Frequency_trans_reflect_is_TPG_everymm(self):
+        global thickness
+        global df
+        self.df.columns = [self.file[-5]]
+        plt.style.use('ggplot')
+        print(thickness)
+        if thickness != self.thickness:
+            df = self.df
+        else:
+            df = df.append(self.df)
+        
+
+        #df.columns = [self.method]
+        df.plot()
+        plt.xlabel('周波数[THz]')
+        plt.ylabel(self.method)
+        #plt.title(self.file)
+        thickness = self.thickness
+        #print(thickness)
+        plt.show()
         return
 
     def min_max_normalization(self):
