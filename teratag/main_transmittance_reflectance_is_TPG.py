@@ -13,7 +13,7 @@ for i in range(2,5):
         if j <= 4:
             try:
                 x = allread('reflectance','{}mm'.format(i)).Frequency_trans_reflect_is_TPG('/Users/ryoya/kawaseken/20190201_fix/PE_{0}mm_{1}.txt'.format(i,j),
-                    '/Users/ryoya/kawaseken/20190201/ref.txt',1.3,1.8)
+                    '/Users/ryoya/kawaseken/20190201/ref.txt',1.4,1.6)
 
                 if flag == 0:
                     x_all = x
@@ -28,11 +28,11 @@ for i in range(2,5):
             except FileNotFoundError as e:
                 print(e)
         #ここに訓練データを追加していく形で。
-        '''
+
         else:
             try:
-                x = allread('reflectance','{}mm'.format(i)).Frequency_trans_reflect_is_TPG('/Users/ryoya/kawaseken/20190201_bag/PE_{0}mm_{1}.txt'.format(i,j),
-                    '/Users/ryoya/kawaseken/20190201/ref.txt',1.40,1.50)
+                x = allread('reflectance','{}mm'.format(i)).Frequency_trans_reflect_is_TPG('/Users/ryoya/kawaseken/20190207_fix/PE_{0}mm_{1}.txt'.format(i,j),
+                    '/Users/ryoya/kawaseken/20190207_fix/ref.txt',1.4,1.6)
 
                 if flag == 0:
                     x_all = x
@@ -46,9 +46,9 @@ for i in range(2,5):
                 y_all.append(i*2)
             except FileNotFoundError as e:
                 print(e)
-        '''
+
 #train_test_split(特徴量,目的関数,1つの厚さにおけるtrainデータの数)
-train_x,train_y,test_x,test_y = train_test_split(x_all,y_all,1)
+train_x,train_y,test_x,test_y = train_test_split(x_all,y_all,5)
 
 #print(train_x)
 #print(train_y)
@@ -59,7 +59,7 @@ train_x,train_y,test_x,test_y = train_test_split(x_all,y_all,1)
 #referenceのカラーコード
 #カラーコードのタグの数width=4,length=4の場合16個のタグに対応
 width = 3
-length = 4
+length = 3
 colorcode(test_y,width,length)
 #SVM
 print('\nSVM')

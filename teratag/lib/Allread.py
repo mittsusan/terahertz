@@ -19,10 +19,10 @@ class allread:
 # ファイルを読み込む。
 # 周波数全て利用
     def Time_intensity(self,file):
-        self.df = pd.read_table(file, engine='python')
+        self.df = pd.read_table(file, engine='python', names=('時間', '電場', '周波数', '反射率', '位相'))
         self.file = file
 
-        self.graph_Time_intensity()
+        self.graph_Time_intensity_everymm()
         x_list = []
 
         for j in self.df.iloc[:,1]:
@@ -33,18 +33,34 @@ class allread:
         return x_all
 
     def Frequency_trans_reflect_TDS(self,file,ref,first,last):
-        self.df = pd.read_table(file, engine='python')
+        self.df = pd.read_table(file, engine='python', names=('時間', '電場', '周波数', '反射率', '位相'))
         self.file = file
         self.first_freq = first
         self.last_freq = last
+        flag = 0
         x_list = []
 
-        df_ref = pd.read_table(ref, engine='python')
+        df_ref = pd.read_table(ref, engine='python', names=('時間', '電場', '周波数', '反射率', '位相'))
         #ここで強度を透過率に変化
         self.df.iloc[:,3] = self.df.iloc[:,3]/df_ref.iloc[:,3]
-        self.graph_Frequency_trans_reflect()
+        df_polygonal = self.df.iloc[:, [2, 3]]
+        df_polygonal = df_polygonal.set_index('周波数')
+        #print(df_polygonal)
+        for i,j  in enumerate(df_polygonal.index):
+            if flag == 0:
+                if j >= first:
+                    first_index = i
+                    flag = 1
+            elif flag == 1:
+                if j >= last:
+                    last_index = i
+                    flag = 2
+        df_polygonal = df_polygonal.iloc[first_index:last_index]
+        df_polygonal = self.min_max_normalization_TDS(df_polygonal)
+        #self.graph_Frequency_trans_reflect()
+        self.graph_Frequency_trans_reflect_everymm(df_polygonal)
         #0.2~2THzを見ている。
-        for j in self.df.iloc[18:165,3]:
+        for j in df_polygonal.iloc[:,0]:
             x_list.append(j)
 
         x_all =  np.array([x_list])
@@ -63,7 +79,7 @@ class allread:
         self.df.iloc[:,0] = self.df.iloc[:,0]/df_ref.iloc[:,0]
         self.df = self.df[first:last]
 
-        self.min_max_normalization()
+        #self.min_max_normalization()
         #self.graph_Frequency_trans_reflect_is_TPG()
         self.graph_Frequency_trans_reflect_is_TPG_everymm()
         #print(self.df)
@@ -91,6 +107,26 @@ class allread:
 
         return
 
+    def graph_Frequency_trans_reflect_everymm(self,df_polygonal):
+        global thickness
+        global df
+        plt.style.use('ggplot')
+        #df_polygonal = self.df.iloc[:, [2, 3]]
+        #df_polygonal = df_polygonal.set_index('周波数')
+        df_polygonal.columns = [self.file[-5]]
+        if thickness != self.thickness:
+            df = df_polygonal
+        else:
+            df = df.append(df_polygonal)
+
+        df.plot()
+        plt.xlabel('周波数[THz]')
+        plt.ylabel(self.method)
+        plt.title(self.thickness)
+        thickness = self.thickness
+        plt.show()
+        return
+
     def graph_Time_intensity(self):
         #print(matplotlib.rcParams['font.family'])
         plt.style.use('ggplot')
@@ -106,6 +142,26 @@ class allread:
         plt.title(self.file)
         plt.show()
 
+        return
+
+    def graph_Time_intensity_everymm(self):
+        global thickness
+        global df
+        plt.style.use('ggplot')
+        df_polygonal = self.df.iloc[:, [0, 1]]
+        df_polygonal = df_polygonal.set_index('時間')
+        df_polygonal.columns = [self.file[-5]]
+        if thickness != self.thickness:
+            df = df_polygonal
+        else:
+            df = df.append(df_polygonal)
+
+        df.plot()
+        plt.xlabel('時間[ps]')
+        plt.ylabel('電場[a.u.]')
+        plt.title(self.thickness)
+        thickness = self.thickness
+        plt.show()
         return
 
     def graph_Frequency_trans_reflect_is_TPG(self):
@@ -144,15 +200,26 @@ class allread:
         return
 
     def min_max_normalization(self):
-        list_index = []
+        list_index = list(self.df.index)
         x = self.df.values  # returns a numpy array
         #print(x)
         min_max_scaler = preprocessing.MinMaxScaler()
         x_scaled = min_max_scaler.fit_transform(x)
-        for n in self.drange(self.first_freq,self.last_freq,0.01):
-            list_index.append(n)
+        #for n in self.drange(self.first_freq,self.last_freq,0.01):
+            #list_index.append(n)
         self.df = pd.DataFrame(data=x_scaled,index=list_index)
         return
+
+    def min_max_normalization_TDS(self,df):
+        list_index = list(df.index)
+        x = df.values  # returns a numpy array
+        #print(len(x))
+        min_max_scaler = preprocessing.MinMaxScaler()
+        x_scaled = min_max_scaler.fit_transform(x)
+        #for n in self.drange(self.first_freq,self.last_freq,0.01):
+            #list_index.append(n)
+        df = pd.DataFrame(data=x_scaled,index=list_index)
+        return df
 
     def drange(self, begin, end, step):
         n = begin
