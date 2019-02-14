@@ -14,16 +14,17 @@ plt.close()
 l = 1
 y_all = []
 flag = 0
-med = [ 'グルコース', 'ラクトース']
+
+med = ['グルコース', 'ラクトース']
 #試薬の数だけ繰り返すように組んでいこう
 #mainデータを読み込む。
 #ここでディレクトリの移動をするので開きたいファイルのパスを入力してください
-#uuuuu
+
 os.chdir('/Users/toshinari/Downloads/暫定')
 for w in med:
     for j in glob.glob("{0}*.txt".format(w)):
         try:
-            x = allread('Intencity').Frequency_Intencity_is_TPG("/Users/toshinari/Downloads/暫定/{0}".format(j), 1.05, 1.8)
+            x = allread('Intencity','0.5').Frequency_Intencity_is_TPG("/Users/toshinari/Downloads/暫定/{0}".format(j), 1.05, 1.8)
             print(j)
             if flag == 0:
                 x_all = x
