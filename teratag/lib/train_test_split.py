@@ -1,6 +1,6 @@
 import numpy as np
 
-def train_test_split(x_all,y_all,train_number):
+def train_test_split(x_all_2,y_all,train_number):
     train_y = []
     test_y = []
     y_save = 0
@@ -8,7 +8,7 @@ def train_test_split(x_all,y_all,train_number):
     flag_train = 0
     flag_test = 0
     number = 0
-    for i,j in zip(x_all,y_all):
+    for i,j in zip(x_all_2,y_all):
         #ここで正解データが変わった時にスイッチが入る。
         #zipのせいでlistに戻ったので、ndarrayに変更
         i = np.array([i])

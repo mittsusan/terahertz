@@ -8,7 +8,7 @@ import numpy as np
 from sklearn import metrics
 
 def svm(train_x, train_y, test_x, test_y):
-    param_list = [0.001, 0.01, 0.1, 1, 10, 100, 1000]
+    param_list = [0.00001, 0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000]
     best_score = 0
     best_parameters = {}
     kernel = 'rbf'
