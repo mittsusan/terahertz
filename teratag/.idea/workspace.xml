@@ -4,13 +4,9 @@
     <bookmark url="file://$PROJECT_DIR$/main_transmittance_reflectance_is_TPG.py" line="52" mnemonic="3" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f37910fe-c2ee-4338-9c51-b49ed820d673" name="Default" comment="add graph_everymm">
-      <change beforePath="$PROJECT_DIR$/../machine_learning_tag_csv.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../machine_learning_tag_csv.ipynb" afterDir="false" />
+    <list default="true" id="f37910fe-c2ee-4338-9c51-b49ed820d673" name="Default" comment="update graph_Time_intensity_everymm and min_max_normalization_TDS and fix main_Time_intensity and main_transmittance_reflectance">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/Allread.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Allread.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_Time_intensity.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_Time_intensity.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_transmittance_reflectance.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_transmittance_reflectance.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_transmittance_reflectance_is_TPG.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_transmittance_reflectance_is_TPG.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -22,7 +18,7 @@
     <SUITE FILE_PATH="coverage/teratag$main_Time_intensity.coverage" NAME="main_Time_intensity Coverage Results" MODIFIED="1549705162857" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/teratag$main.coverage" NAME="main_Time_intensity Coverage Results" MODIFIED="1549259009494" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/teratag$main_transmittance_reflectance_is_TPG.coverage" NAME="main_transmittance_reflectance_is_TPG Coverage Results" MODIFIED="1549530404684" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/teratag$main_transmittance_reflectance.coverage" NAME="main_transmittance_reflectance Coverage Results" MODIFIED="1549721964548" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/teratag$main_transmittance_reflectance.coverage" NAME="main_transmittance_reflectance Coverage Results" MODIFIED="1549723303155" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/teratag$main_transmittance.coverage" NAME="main_transmittance Coverage Results" MODIFIED="1548926316503" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/TDS" />
   </component>
   <component name="DatabaseView">
@@ -42,8 +38,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lib/Allread.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="275">
-              <caret line="136" selection-start-line="136" selection-end-line="136" />
+            <state relative-caret-position="870">
+              <caret line="58" column="9" selection-start-line="58" selection-start-column="9" selection-end-line="58" selection-end-column="9" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -54,7 +50,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main_Time_intensity.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
+            <state relative-caret-position="135">
               <caret line="13" column="54" selection-start-line="13" selection-start-column="37" selection-end-line="13" selection-end-column="54" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
@@ -66,7 +62,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main_transmittance_reflectance.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="122">
+            <state relative-caret-position="135">
               <caret line="13" column="120" selection-start-line="13" selection-start-column="120" selection-end-line="13" selection-end-column="120" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
@@ -78,7 +74,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main_transmittance_reflectance_is_TPG.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="660">
+            <state relative-caret-position="690">
               <caret line="50" column="62" selection-start-line="50" selection-start-column="62" selection-end-line="50" selection-end-column="62" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
@@ -139,10 +135,9 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
-    <option name="y" value="-22" />
+  <component name="ProjectFrameBounds" fullScreen="true">
     <option name="width" value="1440" />
-    <option name="height" value="922" />
+    <option name="height" value="900" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -289,7 +284,8 @@
       <option name="presentableId" value="Default" />
       <updated>1548658064975</updated>
       <workItem from="1549421412073" duration="8943000" />
-      <workItem from="1549698253445" duration="8911000" />
+      <workItem from="1549698253445" duration="10097000" />
+      <workItem from="1550025551506" duration="607000" />
     </task>
     <task id="LOCAL-00001" summary="add graph_everymm">
       <created>1549426136049</created>
@@ -305,11 +301,18 @@
       <option name="project" value="LOCAL" />
       <updated>1549428494839</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="update graph_Time_intensity_everymm and min_max_normalization_TDS and fix main_Time_intensity and main_transmittance_reflectance">
+      <created>1549722930190</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1549722930190</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="17854000" />
+    <option name="totallyTimeSpent" value="19647000" />
   </component>
   <component name="TodoView" selected-index="2">
     <todo-panel id="selected-file">
@@ -321,28 +324,29 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1440" height="900" extended-state="6" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.105150215" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.10658083" />
       <window_info id="Structure" order="1" weight="0.25751072" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4892704" visible="true" weight="0.24039653" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.48855507" visible="true" weight="0.24039653" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39800996" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49713877" weight="0.3283582" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.329602" />
-      <window_info anchor="bottom" x="0" y="303" width="1440" height="240" id="Event Log" order="9" sideWeight="0.5107296" side_tool="true" visible="true" weight="0.24039653" />
-      <window_info anchor="bottom" id="Version Control" order="10" sideWeight="0.49928468" weight="0.32961586" />
+      <window_info anchor="bottom" x="0" y="303" width="1440" height="240" id="Event Log" order="9" sideWeight="0.5114449" side_tool="true" visible="true" weight="0.24039653" />
+      <window_info anchor="bottom" id="Version Control" order="10" sideWeight="0.4985694" weight="0.32961586" />
       <window_info anchor="bottom" id="Python Console" order="11" sideWeight="0.49722221" weight="0.3283582" />
       <window_info anchor="bottom" id="Database Changes" order="12" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info active="true" anchor="right" id="SciView" order="3" visible="true" weight="0.14449213" />
+      <window_info anchor="right" id="SciView" order="3" visible="true" weight="0.20529328" />
       <window_info anchor="right" id="Database" order="4" weight="0.3297568" />
       <window_info anchor="right" id="Coverage" order="5" side_tool="true" />
     </layout>
@@ -353,7 +357,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="add graph_everymm" />
     <MESSAGE value="fix graph_everymm_is-TPG" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix graph_everymm_is-TPG" />
+    <MESSAGE value="update graph_Time_intensity_everymm and min_max_normalization_TDS and fix main_Time_intensity and main_transmittance_reflectance" />
+    <option name="LAST_COMMIT_MESSAGE" value="update graph_Time_intensity_everymm and min_max_normalization_TDS and fix main_Time_intensity and main_transmittance_reflectance" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -387,17 +392,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/train_test_split.py">
+    <entry file="file://$PROJECT_DIR$/lib/Allread.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="35" column="26" selection-start-line="35" selection-start-column="26" selection-end-line="35" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main_transmittance_reflectance_is_TPG.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="660">
-          <caret line="50" column="62" selection-start-line="50" selection-start-column="62" selection-end-line="50" selection-end-column="62" />
+        <state relative-caret-position="870">
+          <caret line="58" column="9" selection-start-line="58" selection-start-column="9" selection-end-line="58" selection-end-column="9" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -406,7 +404,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main_Time_intensity.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
+        <state relative-caret-position="135">
           <caret line="13" column="54" selection-start-line="13" selection-start-column="37" selection-end-line="13" selection-end-column="54" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
@@ -416,7 +414,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main_transmittance_reflectance.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="122">
+        <state relative-caret-position="135">
           <caret line="13" column="120" selection-start-line="13" selection-start-column="120" selection-end-line="13" selection-end-column="120" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
@@ -424,13 +422,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/Allread.py">
+    <entry file="file://$PROJECT_DIR$/main_transmittance_reflectance_is_TPG.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="136" selection-start-line="136" selection-end-line="136" />
+        <state relative-caret-position="690">
+          <caret line="50" column="62" selection-start-line="50" selection-start-column="62" selection-end-line="50" selection-end-column="62" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/train_test_split.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="525">
+          <caret line="35" column="26" selection-start-line="35" selection-start-column="26" selection-end-line="35" selection-end-column="26" />
         </state>
       </provider>
     </entry>

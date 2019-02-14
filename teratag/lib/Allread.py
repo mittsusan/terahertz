@@ -56,7 +56,7 @@ class allread:
                     last_index = i
                     flag = 2
         df_polygonal = df_polygonal.iloc[first_index:last_index]
-        df_polygonal = self.min_max_normalization_TDS(df_polygonal)
+        #df_polygonal = self.min_max_normalization_TDS(df_polygonal)
         #self.graph_Frequency_trans_reflect()
         self.graph_Frequency_trans_reflect_everymm(df_polygonal)
         #0.2~2THzを見ている。
