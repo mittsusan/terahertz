@@ -98,8 +98,8 @@ class allread:
         #ここで強度を透過率に変化
         self.df.iloc[:,0] = self.df.iloc[:,0]/df_ref.iloc[:,0]
         self.df = self.df[first:last]
-
-        #self.min_max_normalization()
+        self.Frequency_trans_reflect_is_TPG_FFT()
+        self.min_max_normalization()
         #self.graph_Frequency_trans_reflect_is_TPG()
         self.graph_Frequency_trans_reflect_is_TPG_everymm()
         #print(self.df)
@@ -246,3 +246,17 @@ class allread:
         while n  < end+0.01:
             yield n
             n += step
+
+    def Frequency_trans_reflect_is_TPG_FFT(self):
+        list_index = list(self.df.index)
+        a_df = self.df.values
+        # ここで一次元にする事でFFT出来るようにする。
+        one_dimensional_a_df = np.ravel(a_df)
+        F = np.fft.fft(one_dimensional_a_df)
+        Amp = np.abs(F)
+        print(Amp)
+        print(len(Amp))
+        two_dimentional_Amp = np.reshape(Amp,(len(Amp),1))
+        self.df = pd.DataFrame(data=two_dimentional_Amp, index=list_index)
+        print(self.df)
+        return

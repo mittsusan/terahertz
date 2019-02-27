@@ -28,7 +28,7 @@ for i in range(2,5):
             except FileNotFoundError as e:
                 print(e)
         #ここに訓練データを追加していく形で。
-
+        '''
         else:
             try:
                 x = allread('reflectance','{}mm'.format(i)).Frequency_trans_reflect_is_TPG('/Users/ryoya/kawaseken/20190207_fix/PE_{0}mm_{1}.txt'.format(i,j),
@@ -46,9 +46,10 @@ for i in range(2,5):
                 y_all.append(i*2)
             except FileNotFoundError as e:
                 print(e)
+        '''
 
 #train_test_split(特徴量,目的関数,1つの厚さにおけるtrainデータの数)
-train_x,train_y,test_x,test_y = train_test_split(x_all,y_all,5)
+train_x,train_y,test_x,test_y = train_test_split(x_all,y_all,1)
 
 #print(train_x)
 #print(train_y)
