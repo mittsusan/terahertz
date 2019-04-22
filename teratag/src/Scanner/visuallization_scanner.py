@@ -4,7 +4,7 @@ import pandas as pd
 import os
 
 #os.chdir('')
-df = pd.read_csv('../../../tmp.csv', header=None, skiprows=2)
+df = pd.read_csv('../../../../sample.csv', header=None, skiprows=2)
 a_df = df.values
 print(a_df)
 
