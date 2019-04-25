@@ -98,7 +98,7 @@ class allread:
         #ここで強度を透過率に変化
         self.df.iloc[:,0] = self.df.iloc[:,0]/df_ref.iloc[:,0]
         self.df = self.df[first:last]
-        self.Frequency_trans_reflect_is_TPG_FFT()
+        #self.Frequency_trans_reflect_is_TPG_FFT()
         self.min_max_normalization()
         #self.graph_Frequency_trans_reflect_is_TPG()
         self.graph_Frequency_trans_reflect_is_TPG_everymm()
