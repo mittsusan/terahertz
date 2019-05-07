@@ -9,13 +9,13 @@ from lib.visualization import colorcode
 y_all = []
 flag = 0
 #mainデータを読み込む。
-for i in range(1,5):
+for i in range(2,5):
     #ここで厚みの選択
     i = i*0.5
     for j in range(1,6):
         if j <= 4:
             try:
-                x = allread('reflectance','{}mm'.format(i)).Frequency_trans_reflect_is_TPG('/Users/ryoya/kawaseken/20190201_fix/PE_{0}mm_{1}.txt'.format(i,j),
+                x = allread('振幅[a.u.]','{}mm'.format(i)).Frequency_trans_reflect_is_TPG('/Users/ryoya/kawaseken/20190201_fix/PE_{0}mm_{1}.txt'.format(i,j),
                     '/Users/ryoya/kawaseken/20190201/ref.txt',1.4,1.6)
 
                 if flag == 0:
