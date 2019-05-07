@@ -101,7 +101,7 @@ class allread:
         #self.Frequency_trans_reflect_is_TPG_FFT()
         self.min_max_normalization()
         #self.graph_Frequency_trans_reflect_is_TPG()
-        self.graph_Frequency_trans_reflect_is_TPG_everymm()
+        self.graph_Frequency_trans_reflect_is_TPG_everymm('周波数[THz]','反射率')
         #print(self.df)
         for j in self.df.iloc[:,0]:
             x_list.append(j)
@@ -198,7 +198,7 @@ class allread:
 
         return
 
-    def graph_Frequency_trans_reflect_is_TPG_everymm(self):
+    def graph_Frequency_trans_reflect_is_TPG_everymm(self,x,y):
         global thickness
         global df
         self.df.columns = [self.file[-5]]
@@ -211,9 +211,9 @@ class allread:
 
         #df.columns = [self.method]
         df.plot()
-        plt.xlabel('周波数[THz]')
-        plt.ylabel(self.method)
-        #plt.title(self.file)
+        plt.xlabel(x)
+        plt.ylabel(y)
+        plt.title(self.thickness)
         thickness = self.thickness
         #print(thickness)
         plt.show()
@@ -249,13 +249,16 @@ class allread:
 
     def Frequency_trans_reflect_is_TPG_FFT(self):
         list_index = list(self.df.index)
+        print(list_index)
+        N = len(list_index) #サンプル数
+        dt = round(list_index[1] - list_index[0],2) #サンプリング間隔
+        t = np.arange(0, N*dt, dt) # 時間軸
+        list_index = list(t)
         a_df = self.df.values
         # ここで一次元にする事でFFT出来るようにする。
         one_dimensional_a_df = np.ravel(a_df)
         F = np.fft.fft(one_dimensional_a_df)
         Amp = np.abs(F)
-        print(Amp)
-        print(len(Amp))
         two_dimentional_Amp = np.reshape(Amp,(len(Amp),1))
         self.df = pd.DataFrame(data=two_dimentional_Amp, index=list_index)
         print(self.df)
