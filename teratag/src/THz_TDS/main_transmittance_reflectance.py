@@ -1,4 +1,6 @@
 import numpy as np
+import sys
+sys.path.append('../../')
 from lib.Allread import allread
 from lib.train_test_split import train_test_split
 from lib.machine_learning.classification import svm,kNN,pCA
@@ -8,11 +10,11 @@ y_all = []
 flag = 0
 #mainデータを読み込む。
 for i in range(2,5):
-    i = i*0.5
-    for j in range(1,5):
+    #i = i*0.5
+    for j in range(1,4):
         try:
-            x = allread('reflectance','{}mm'.format(i)).Frequency_trans_reflect_TDS('/Users/ryoya/kawaseken/20190123_fix/2019_0123_{0}mm_{1}.txt'.format(i,j),
-                                                                   '/Users/ryoya/kawaseken/20190123/2019_0123_ref_1.txt',1.4,1.6)
+            x = allread('reflectance','{}mm'.format(i)).Frequency_trans_reflect_TDS(r'C:\Users\tera\PycharmProjects\20190509\Si_touka\{}\{}.txt'.format(i,j),
+                                                                   r'C:\Users\tera\PycharmProjects\20190509\Si_touka\ref.txt',1.0,2.0)
             if flag == 0:
                 x_all = x
                 flag += 1
