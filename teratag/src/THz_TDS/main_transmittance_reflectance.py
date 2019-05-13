@@ -13,7 +13,7 @@ for i in range(2,5):
     #i = i*0.5
     for j in range(1,4):
         try:
-            x = allread('reflectance','{}mm'.format(i)).Frequency_trans_reflect_TDS(r'C:\Users\tera\PycharmProjects\20190509\Si_touka\{}\{}.txt'.format(i,j),
+            x = allread('transmittance','{}mm'.format(i)).Frequency_trans_reflect_TDS(r'C:\Users\tera\PycharmProjects\20190509\Si_touka\{}\{}.txt'.format(i,j),
                                                                    r'C:\Users\tera\PycharmProjects\20190509\Si_touka\ref.txt',1.0,2.0)
             if flag == 0:
                 x_all = x
