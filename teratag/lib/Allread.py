@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib
 import matplotlib.pyplot as plt
+import matplotlib.ticker as tick
 from matplotlib import rcParams
 from sklearn import preprocessing
 rcParams.update({'figure.autolayout': True})
@@ -56,7 +57,7 @@ class allread:
                     last_index = i
                     flag = 2
         df_polygonal = df_polygonal.iloc[first_index:last_index]
-        df_polygonal = self.min_max_normalization_TDS(df_polygonal)
+        #df_polygonal = self.min_max_normalization_TDS(df_polygonal)
         #self.graph_Frequency_trans_reflect()
         self.graph_Frequency_trans_reflect_everymm(df_polygonal)
         #0.2~2THzを見ている。
@@ -140,10 +141,16 @@ class allread:
             df = df.append(df_polygonal)
 
         df.plot()
-        plt.xlabel('周波数[THz]')
+        plt.xticks([1,1.1,1.2,1.32,1.4,1.5,1.62,1.7,1.8,1.94,2])
+        plt.yticks([0,0.2,0.4,0.6,0.8,1.0,1.2])
+        plt.ylim(0,1.2)
+        plt.gca().xaxis.set_minor_locator(tick.MultipleLocator(0.02))
+        plt.gca().yaxis.set_minor_locator(tick.MultipleLocator(0.02))
+        plt.xlabel('frequency[THz]')
         plt.ylabel(self.method)
         plt.title(self.thickness)
         thickness = self.thickness
+        plt.grid(which='minor')
         plt.show()
         return
 
