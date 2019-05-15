@@ -9,14 +9,15 @@ from lib.visualization import colorcode
 y_all = []
 flag = 0
 #mainデータを読み込む。
-for i in range(2,5):
+num = 5 #numは使用する最後のファイル名の数＋１(rangeのため)
+for i in range(2,num):
     #ここで厚みの選択
     i = i*0.5
     for j in range(1,6):
         if j <= 4:
             try:
-                x = allread('振幅[a.u.]','{}mm'.format(i)).Frequency_trans_reflect_is_TPG('/Users/ryoya/kawaseken/20190201_fix/PE_{0}mm_{1}.txt'.format(i,j),
-                    '/Users/ryoya/kawaseken/20190201/ref.txt',1.4,1.6)
+                x = allread('振幅[a.u.]','{}mm'.format(i),num-1).Frequency_trans_reflect_is_TPG(r'C:\Users\kawaselab\PycharmProjects\mitsuhashi\shahei\{}zink\{}.txt'.format(i,j),
+                    r'C:\Users\kawaselab\PycharmProjects\mitsuhashi\shahei\ref.txt',1.4,1.6)
 
                 if flag == 0:
                     x_all = x
