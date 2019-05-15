@@ -9,11 +9,12 @@ rcParams.update({'figure.autolayout': True})
 thickness = ''
 
 class allread:
-    def __init__(self,method,thickness):
+    def __init__(self,method,thickness,final_filenum):
         #self.df = pd.read_table(file, engine='python')
         #self.file = file
         self.method = method
         self.thickness = thickness
+        self.fianl_num = final_filenum
 
         #self.first_freq = first
         #self.last_freq = last
@@ -102,7 +103,7 @@ class allread:
         #self.Frequency_trans_reflect_is_TPG_FFT()
         self.min_max_normalization()
         #self.graph_Frequency_trans_reflect_is_TPG()
-        self.graph_Frequency_trans_reflect_is_TPG_everymm('周波数[THz]','反射率')
+        self.graph_Frequency_trans_reflect_is_TPG_everymm('frequency[THz]','reflectance')
         #print(self.df)
         for j in self.df.iloc[:,0]:
             x_list.append(j)
@@ -210,20 +211,30 @@ class allread:
         global df
         self.df.columns = [self.file[-5]]
         plt.style.use('ggplot')
+        #print('thickness{}'.format(thickness))
+        #print('self.thickness{}'.format(self.thickness))
         if thickness != self.thickness:
             df = self.df
+            thickness = self.thickness
+            #print(df)
         else:
             df = df.append(self.df)
-        
 
-        #df.columns = [self.method]
-        df.plot()
-        plt.xlabel(x)
-        plt.ylabel(y)
-        plt.title(self.thickness)
-        thickness = self.thickness
-        #print(thickness)
-        plt.show()
+        
+        #print(self.file[-5])
+        #print(type(self.file[-5]))
+
+        if self.file[-5] == str(self.fianl_num):
+            #df.columns = [self.method]
+            #if self.file[-5] == '3'
+            #print(df)
+            df.plot()
+            plt.xlabel(x)
+            plt.ylabel(y)
+            plt.title(self.thickness)
+            thickness = self.thickness
+            #print(thickness)
+            plt.show()
         return
 
     def min_max_normalization(self):
