@@ -100,10 +100,10 @@ class allread:
         #ここで強度を透過率に変化
         self.df.iloc[:,0] = self.df.iloc[:,0]/df_ref.iloc[:,0]
         self.df = self.df[first:last]
-        #self.Frequency_trans_reflect_is_TPG_FFT()
-        self.min_max_normalization()
-        #self.graph_Frequency_trans_reflect_is_TPG()
-        self.graph_Frequency_trans_reflect_is_TPG_everymm('frequency[THz]','reflectance')
+        self.Frequency_trans_reflect_is_TPG_FFT(1) #振幅スペクトルが欲しい場合はnumberを0、位相スペクトルが欲しい時はnumberを1
+        #self.min_max_normalization()
+        self.graph_Frequency_trans_reflect_is_TPG()
+        #self.graph_Frequency_trans_reflect_is_TPG_everymm('frequency[THz]','reflectance')
         #print(self.df)
         for j in self.df.iloc[:,0]:
             x_list.append(j)
@@ -265,19 +265,27 @@ class allread:
             yield n
             n += step
 
-    def Frequency_trans_reflect_is_TPG_FFT(self):
+    def Frequency_trans_reflect_is_TPG_FFT(self,number):
         list_index = list(self.df.index)
         print(list_index)
         N = len(list_index) #サンプル数
         dt = round(list_index[1] - list_index[0],2) #サンプリング間隔
         t = np.arange(0, N*dt, dt) # 時間軸
         list_index = list(t)
+        #freqList = np.fft.fftfreq(N, d=1.0/fs)  # 周波数軸の値を計算 fsはサンプリング周波数
         a_df = self.df.values
         # ここで一次元にする事でFFT出来るようにする。
         one_dimensional_a_df = np.ravel(a_df)
         F = np.fft.fft(one_dimensional_a_df)
-        Amp = np.abs(F)
+        Amp = np.abs(F) #下とおんなじ
+        #Amp = [np.sqrt(c.real ** 2 + c.imag ** 2) for c in F]  # 振幅スペクトル
+        phaseSpectrum = [np.arctan2(int(c.imag), int(c.real)) for c in F]  # 位相スペクトル
         two_dimentional_Amp = np.reshape(Amp,(len(Amp),1))
-        self.df = pd.DataFrame(data=two_dimentional_Amp, index=list_index)
+        two_dimentional_phase = np.reshape(phaseSpectrum, (len(phaseSpectrum), 1))
+        #ここで振幅スペクトルか位相スペクトルかを選ぶ。
+        if number == 0:
+            self.df = pd.DataFrame(data=two_dimentional_Amp, index=list_index)
+        else:
+            self.df = pd.DataFrame(data=two_dimentional_phase, index=list_index)
         print(self.df)
         return
