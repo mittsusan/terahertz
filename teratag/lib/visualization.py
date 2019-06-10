@@ -14,7 +14,7 @@ def colorcode(best_pred, x, y):
     color_G = 125
     color_B = 75
     j_save = 0
-    for i in range(x+1):
+    for i in range(y+2):
         position_x.append(50)
 
     for i in range(y+2):
@@ -54,7 +54,42 @@ def colorcode(best_pred, x, y):
             color_R = 255
             color_G = 255
             color_B = 0
+        elif j == 5:
+            color_R = 255
+            color_G = 0
+            color_B = 255
+        elif j == 6:
+            color_R = 0
+            color_G = 255
+            color_B = 255
+        elif j == 7:
+            color_R = 255
+            color_G = 255
+            color_B = 255
+        print(i)
+        print(j)
 
+
+        for k in range(y):
+            print('loopstart')
+            print(k)
+            print('kkk{}'.format(k))
+            print('x{}'.format(x))
+            print('i:{}'.format(i))
+            if int(i) < int(x) * int(k+1):
+                print('描けた')
+                print(position_x)
+                print(position_y)
+                print('k{}'.format(k))
+                print(j)
+                draw.rectangle((position_x[k], position_y[k], position_x[k] + 100, position_y[k+1] - 10),
+                               fill=(color_R, color_G, color_B))
+                position_x[k] += 110
+                break
+            print('描けなかった')
+
+
+        '''
         if i < x:
             draw.rectangle((position_x[0], position_y[0], position_x[0] + 100, position_y[1]-10), fill=(color_R, color_G, color_B))
             position_x[0] += 110
@@ -67,6 +102,8 @@ def colorcode(best_pred, x, y):
         elif i < x * 4:
             draw.rectangle((position_x[3], position_y[3], position_x[3] + 100, position_y[4]-10), fill=(color_R, color_G, color_B))
             position_x[3] += 110
+        
+        '''
 
         #j_save = j
     plt.imshow(np.array(im))
