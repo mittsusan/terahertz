@@ -10,14 +10,14 @@ y_all = []
 flag = 0
 #mainデータを読み込む。
 num = 5 #numは使用する最後のファイル名の数＋１(rangeのため)
-for i in range(2,5):
-    #ここで厚みの選択
-    i = i*0.5
+for i in range(1,8):
+    #ここで厚みの選択及び糖
+    #i = i*0.5
     for j in range(1,num):
         if j <= 4:
             try:
-                x = allread('振幅[a.u.]','{}mm'.format(i),num-1).Frequency_trans_reflect_is_TPG(r'/Users/ryoya/kawaseken/20190201_fix/PE_{0}mm_{1}.txt'.format(i,j),
-                    r'/Users/ryoya/kawaseken/20190201_fix/ref.txt',1.4,1.6)
+                x = allread('intensity[a.u.]','{}mm'.format(i),num-1).Frequency_trans_reflect_is_TPG(r'/Users/ryoya/kawaseken/20190607/is-TPG/EMS/{0}/{1}.txt'.format(i,j),
+                    r'/Users/ryoya/kawaseken/20190607/is-TPG/EMS/ref.txt',1.0,2.1)
 
                 if flag == 0:
                     x_all = x
@@ -28,7 +28,7 @@ for i in range(2,5):
 
 
                 #y_allの値がint出ないとsvm,pcaの可視化が上手くいかないので0.5mmの場合は*2などをして元に戻す。
-                y_all.append(i*2)
+                y_all.append(i)
             except FileNotFoundError as e:
                 print(e)
         #ここに訓練データを追加していく形で。
@@ -56,15 +56,15 @@ for i in range(2,5):
 train_x,train_y,test_x,test_y = train_test_split(x_all,y_all,1)
 
 #print(train_x)
-#print(train_y)
+print(train_y)
 #print(test_x)
-#print(test_y)
+print(test_y)
 #print(x_all)
 #print(y_all)
 #referenceのカラーコード
 #カラーコードのタグの数width=4,length=4の場合16個のタグに対応
 width = 3
-length = 3
+length = 7
 colorcode(test_y,width,length)
 #SVM
 print('\nSVM')
@@ -76,7 +76,8 @@ best_pred=kNN(train_x,train_y,test_x,test_y)
 colorcode(best_pred,width,length)
 # PCA-SVM
 print('\nPCA-SVM')
-transformed, targets = pCA(x_all, y_all)
+#厚みで識別する際はPCAの第3引数を0に
+transformed, targets = pCA(x_all, y_all,1)
 
 train_x_pca,train_y_pca,test_x_pca,test_y_pca = train_test_split(transformed,targets,1)
 
