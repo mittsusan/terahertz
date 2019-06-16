@@ -64,7 +64,7 @@ def kNN(train_x, train_y, test_x, test_y):
     return pred_y
 
 
-def pCA(x_all, y_all):
+def pCA(x_all, y_all,number):
     # 主成分分析する
     features = x_all
     targets = y_all
@@ -76,15 +76,39 @@ def pCA(x_all, y_all):
     #print(len(targets))
     # print(transformed)
     # 主成分をプロットする
-    for label in np.unique(targets):
-        plt.scatter(transformed[targets == label, 0],
-                    transformed[targets == label, 1], label='{}mm'.format(label*0.5))
+    if number == 0:
+        for label in np.unique(targets):
+            plt.scatter(transformed[targets == label, 0],
+                        transformed[targets == label, 1], label='{}mm'.format(label*0.5))
+    else:
+        for label in np.unique(targets):
+            if label == 1:
+                plt.scatter(transformed[targets == label, 0],
+                            transformed[targets == label, 1], label='Glucose')
+            elif label == 2:
+                plt.scatter(transformed[targets == label, 0],
+                            transformed[targets == label, 1], label='Lactose')
+            elif label == 3:
+                plt.scatter(transformed[targets == label, 0],
+                            transformed[targets == label, 1], label='Maltose')
+            elif label == 4:
+                plt.scatter(transformed[targets == label, 0],
+                            transformed[targets == label, 1], label='Glu_Lac')
+            elif label == 5:
+                plt.scatter(transformed[targets == label, 0],
+                            transformed[targets == label, 1], label='Lac_Mal')
+            elif label == 6:
+                plt.scatter(transformed[targets == label, 0],
+                            transformed[targets == label, 1], label='Mal_Glu')
+            elif label == 7:
+                plt.scatter(transformed[targets == label, 0],
+                            transformed[targets == label, 1], label='Glu_Lac_Mal')
     plt.legend(loc='upper right',
                bbox_to_anchor=(1,1),
                borderaxespad=0.5,fontsize = 10)
     plt.title('principal component')
-    plt.xlabel('pc1')
-    plt.ylabel('pc2')
+    plt.xlabel('pc1(a.u.)')
+    plt.ylabel('pc2(a.u.)')
 
     # 主成分の寄与率を出力する
     print('各次元の寄与率: {0}'.format(pca.explained_variance_ratio_))

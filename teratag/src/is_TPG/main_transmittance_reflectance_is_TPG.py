@@ -16,7 +16,7 @@ for i in range(1,8):
     for j in range(1,num):
         if j <= 4:
             try:
-                x = allread('振幅[a.u.]','{}mm'.format(i),num-1).Frequency_trans_reflect_is_TPG(r'/Users/ryoya/kawaseken/20190607/is-TPG/EMS/{0}/{1}.txt'.format(i,j),
+                x = allread('intensity[a.u.]','{}mm'.format(i),num-1).Frequency_trans_reflect_is_TPG(r'/Users/ryoya/kawaseken/20190607/is-TPG/EMS/{0}/{1}.txt'.format(i,j),
                     r'/Users/ryoya/kawaseken/20190607/is-TPG/EMS/ref.txt',1.0,2.1)
 
                 if flag == 0:
@@ -76,7 +76,8 @@ best_pred=kNN(train_x,train_y,test_x,test_y)
 colorcode(best_pred,width,length)
 # PCA-SVM
 print('\nPCA-SVM')
-transformed, targets = pCA(x_all, y_all)
+#厚みで識別する際はPCAの第3引数を0に
+transformed, targets = pCA(x_all, y_all,1)
 
 train_x_pca,train_y_pca,test_x_pca,test_y_pca = train_test_split(transformed,targets,1)
 
