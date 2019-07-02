@@ -1,7 +1,7 @@
 import numpy as np
 from lib.Allread import allread
 from lib.train_test_split import train_test_split
-from lib.machine_learning.classification import svm,kNN,pCA
+from lib.machine_learning.classification import svm,kNN,pCA,iCA
 from lib.visualization import colorcode
 
 y_all = []

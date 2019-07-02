@@ -12,6 +12,10 @@ sample_init = 0
 
 
 class allread:
+
+   
+
+
     def __init__(self,method,thickness,type,sample,last_type,last_num):
         #self.df = pd.read_table(file, engine='python')
         #self.file = file
@@ -21,6 +25,7 @@ class allread:
         self.sample = sample
         self.last_type = last_type
         self.last_num = last_num
+
         #self.first_freq = first
         #self.last_freq = last
 # ファイルを読み込む。
@@ -82,11 +87,13 @@ class allread:
         self.last_freq = last
         x_list = []
         self.df = self.df[first:last]
+
         print(self.df)
         self.min_max_normalization()
 
-        self.graph_Frequency_trans_reflect_is_TPG()
-        print(self.df)
+
+        #self.graph_Frequency_trans_reflect_is_TPG()
+        #print(self.df)
         for j in self.df.iloc[:, 0]:
             x_list.append(j)
 
@@ -94,6 +101,32 @@ class allread:
         x_all = np.array([x_list])
 
         return x_all
+
+
+    def Prepare_Machine_Learning(self,file,ref):
+        self.df = pd.read_table(file, engine='python',index_col=0)
+        self.file = file
+        x_list = []
+
+        df_ref = pd.read_table(ref, engine='python',index_col=0)
+        #print(df_ref)
+
+        #ここで強度を透過率に変化
+        self.df.iloc[:,0] = self.df.iloc[:,0]/df_ref.iloc[:,0]
+        self.df = self.df[first:last]
+        #self.Frequency_trans_reflect_is_TPG_FFT()
+        self.min_max_normalization()
+        #self.graph_Frequency_trans_reflect_is_TPG()
+        self.graph_Frequency_trans_reflect_is_TPG()
+        #print(self.df)
+        for j in self.df.iloc[:,0]:
+            x_list.append(j)
+
+        x_all = np.array([x_list])
+
+        return x_all, df_ref
+
+
 
 
     def Frequency_trans_reflect_is_TPG(self,file,ref,first,last):
@@ -105,20 +138,25 @@ class allread:
         x_list = []
 
         df_ref = pd.read_table(ref, engine='python',index_col=0)
+        #print(df_ref)
+
         #ここで強度を透過率に変化
         #self.df.iloc[:,0] = self.df.iloc[:,0]/df_ref.iloc[:,0]
         self.df = self.df[first:last]
         #self.Frequency_trans_reflect_is_TPG_FFT(0) #振幅スペクトルが欲しい場合はnumberを0、位相スペクトルが欲しい時はnumberを1
         self.min_max_normalization()
         #self.graph_Frequency_trans_reflect_is_TPG()
+
+
         self.graph_Frequency_trans_reflect_is_TPG_everymm('frequency[THz]',self.method)
+
         #print(self.df)
         for j in self.df.iloc[:,0]:
             x_list.append(j)
 
-        x_all =  np.array([x_list])
+        x_all = np.array([x_list])
 
-        return x_all
+        return x_all, df_ref
 
     def graph_Frequency_trans_reflect(self):
         #print(matplotlib.rcParams['font.family'])
@@ -211,7 +249,7 @@ class allread:
         plt.ylabel(self.method)
         plt.title('type:'+str(self.type)+'sample:' + str(self.sample))
         #plt.show()
-
+        plt.close()
         return
 
     def graph_Frequency_trans_reflect_is_TPG_everymm(self,x,y):
@@ -244,9 +282,11 @@ class allread:
             df.plot()
             plt.xlabel(x)
             plt.ylabel(y)
+
             plt.title(self.type)
             plt.show(colormap='tab20')
             #print(df)
+
         return
 
     def min_max_normalization(self):
