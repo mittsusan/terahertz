@@ -2,35 +2,40 @@ import numpy as np
 import sys
 sys.path.append('../../')
 from lib.Allread import allread
-from lib.train_test_split import train_test_split
+from lib.train_test_split import train_test_split,decide_test_number
+#from sklearn.model_selection import train_test_split
 from lib.machine_learning.classification import svm,kNN,pCA
 from lib.visualization import colorcode
 
+date_dir = '/Users/ryoya/kawaseken/20190701'
+shielding_material = '/cardboard2_denim3_sensitivity2mV'
+sensitivity = '/sensitivity0.2mV'
 y_all = []
 flag = 0
 #mainデータを読み込む。
-num = 10 #numは使用する最後のファイル名の数＋１(rangeのため)
-for i in range(2,5):
-    #ここで厚みの選択
-    i = i*0.5
-    for j in range(1,num):
-        if j <= 10:
-            try:
-                x = allread('振幅[a.u.]','{}mm'.format(i),num-1).Frequency_trans_reflect_is_TPG(r'/Users/ryoya/kawaseken/20190207_fix/PE_{0}mm_{1}.txt'.format(i,j),
-                    r'/Users/ryoya/kawaseken/20190207_fix/ref.txt',1.0,2.0)
+last_type = 6 #使用する種類
+last_num = 10 #最後の種類の使用するファイル数
+for i in range(1,last_type+1):
+    #ここで厚みの選択及び糖
+    #i = i*0.5
+    for j in range(1,last_num+1):
+        #if j <= 11:
+        try:
+            x = allread('intensity[a.u.]','{}mm'.format(i),i,j,last_type,last_num).Frequency_trans_reflect_is_TPG(date_dir + shielding_material + '/' + str(i) + sensitivity + '/' + str(j) + '.txt',
+                    date_dir + '/ref.txt',1.0,1.6)
 
-                if flag == 0:
-                    x_all = x
-                    flag += 1
+            if flag == 0:
+                x_all = x
+                flag += 1
 
-                else:
-                    x_all = np.append(x_all, x, axis=0)
+            else:
+                x_all = np.append(x_all, x, axis=0)
 
 
-                #y_allの値がint出ないとsvm,pcaの可視化が上手くいかないので0.5mmの場合は*2などをして元に戻す。
-                y_all.append(i*2)
-            except FileNotFoundError as e:
-                print(e)
+            #y_allの値がint出ないとsvm,pcaの可視化が上手くいかないので0.5mmの場合は*2などをして元に戻す。
+            y_all.append(i)
+        except FileNotFoundError as e:
+            print(e)
         #ここに訓練データを追加していく形で。
         '''
         else:
@@ -53,10 +58,12 @@ for i in range(2,5):
         '''
 
 #train_test_split(特徴量,目的関数,1つの厚さにおけるtrainデータの数)
-train_x,train_y,test_x,test_y = train_test_split(x_all,y_all,1)
+#train_x,train_y,test_x,test_y = train_test_split(x_all,y_all,1)
+train_x,train_y,test_x,test_y = decide_test_number(x_all,y_all,3)
+#train_x, test_x, train_y, test_y = train_test_split(x_all, y_all, test_size=3)
 
-#print(train_x)
-#print(train_y)
+print(type(train_x))
+print(type(train_y))
 #print(test_x)
 #print(test_y)
 #print(x_all)
@@ -64,7 +71,7 @@ train_x,train_y,test_x,test_y = train_test_split(x_all,y_all,1)
 #referenceのカラーコード
 #カラーコードのタグの数width=4,length=4の場合16個のタグに対応
 width = 3
-length = 3
+length = 7
 colorcode(test_y,width,length)
 #SVM
 print('\nSVM')
@@ -76,7 +83,8 @@ best_pred=kNN(train_x,train_y,test_x,test_y)
 colorcode(best_pred,width,length)
 # PCA-SVM
 print('\nPCA-SVM')
-transformed, targets = pCA(x_all, y_all)
+#厚みで識別する際はPCAの第3引数を0に
+transformed, targets = pCA(x_all, y_all,1)
 
 train_x_pca,train_y_pca,test_x_pca,test_y_pca = train_test_split(transformed,targets,1)
 

@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import os
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.ticker as tick
@@ -7,14 +8,23 @@ from matplotlib import rcParams
 from sklearn import preprocessing
 rcParams.update({'figure.autolayout': True})
 thickness = ''
+sample_init = 0
+
 
 class allread:
-    def __init__(self,method):
+
+   
+
+
+    def __init__(self,method,thickness,type,sample,last_type,last_num):
         #self.df = pd.read_table(file, engine='python')
         #self.file = file
         self.method = method
-        #self.thickness = thickness
-        #self.fianl_num = final_filenum
+        self.thickness = thickness
+        self.type = type
+        self.sample = sample
+        self.last_type = last_type
+        self.last_num = last_num
 
         #self.first_freq = first
         #self.last_freq = last
@@ -70,14 +80,17 @@ class allread:
         return x_all
 
     def Frequency_Intencity_is_TPG(self, file, first, last):
+
         self.df = pd.read_table(file, engine='python', index_col=0)
         self.file = file
         self.first_freq = first
         self.last_freq = last
         x_list = []
         self.df = self.df[first:last]
-        #print(self.df)
-        # self.min_max_normalization()
+
+        print(self.df)
+        self.min_max_normalization()
+
 
         #self.graph_Frequency_trans_reflect_is_TPG()
         #print(self.df)
@@ -89,10 +102,6 @@ class allread:
 
         return x_all
 
-    def Go_to_EX(self, file):
-        self.df = pd.read_table(file, engine = 'python', index_call = 0)
-        self.file = file
-        x_list = []
 
     def Prepare_Machine_Learning(self,file,ref):
         self.df = pd.read_table(file, engine='python',index_col=0)
@@ -121,6 +130,7 @@ class allread:
 
 
     def Frequency_trans_reflect_is_TPG(self,file,ref,first,last):
+
         self.df = pd.read_table(file, engine='python',index_col=0)
         self.file = file
         self.first_freq = first
@@ -131,12 +141,15 @@ class allread:
         #print(df_ref)
 
         #ここで強度を透過率に変化
-        self.df.iloc[:,0] = self.df.iloc[:,0]/df_ref.iloc[:,0]
+        #self.df.iloc[:,0] = self.df.iloc[:,0]/df_ref.iloc[:,0]
         self.df = self.df[first:last]
-        #self.Frequency_trans_reflect_is_TPG_FFT()
+        #self.Frequency_trans_reflect_is_TPG_FFT(0) #振幅スペクトルが欲しい場合はnumberを0、位相スペクトルが欲しい時はnumberを1
         self.min_max_normalization()
         #self.graph_Frequency_trans_reflect_is_TPG()
-        self.graph_Frequency_trans_reflect_is_TPG()
+
+
+        self.graph_Frequency_trans_reflect_is_TPG_everymm('frequency[THz]',self.method)
+
         #print(self.df)
         for j in self.df.iloc[:,0]:
             x_list.append(j)
@@ -234,7 +247,7 @@ class allread:
         df.plot()
         plt.xlabel('周波数[THz]')
         plt.ylabel(self.method)
-        plt.title(self.file)
+        plt.title('type:'+str(self.type)+'sample:' + str(self.sample))
         #plt.show()
         plt.close()
         return
@@ -242,32 +255,38 @@ class allread:
     def graph_Frequency_trans_reflect_is_TPG_everymm(self,x,y):
         global thickness
         global df
-        self.df.columns = [self.file[-5]]
-        plt.style.use('ggplot')
-        #print('thickness{}'.format(thickness))
-        #print('self.thickness{}'.format(self.thickness))
-        if thickness != self.thickness:
+        global sample_init
+
+
+        if sample_init == 0 and self.sample == 1:
+            sample_init = 1
+            self.df.columns = [self.sample]
             df = self.df
-            thickness = self.thickness
-            #print(df)
+            sample_init = 1
+        elif self.sample == 1:
+            plt.style.use('ggplot')
+            #print('plot')
+            df.plot(colormap='tab20')
+            plt.xlabel(x)
+            plt.ylabel(y)
+            plt.title(self.type-1)
+            plt.show()
+            self.df.columns = [self.sample]
+            df = self.df
+
         else:
+            self.df.columns = [self.sample]
             df = df.append(self.df)
-
-        
-        #print(self.file[-5])
-        #print(type(self.file[-5]))
-
-        if self.file[-5] == str(self.fianl_num):
-            #df.columns = [self.method]
-            #if self.file[-5] == '3'
-            #print(df)
+        if self.last_type == self.type and self.last_num == self.sample:
+            print('lastplot')
             df.plot()
             plt.xlabel(x)
             plt.ylabel(y)
-            plt.title(self.thickness)
-            thickness = self.thickness
-            #print(thickness)
-            #plt.show()
+
+            plt.title(self.type)
+            plt.show(colormap='tab20')
+            #print(df)
+
         return
 
     def min_max_normalization(self):
@@ -298,19 +317,31 @@ class allread:
             yield n
             n += step
 
-    def Frequency_trans_reflect_is_TPG_FFT(self):
+    def Frequency_trans_reflect_is_TPG_FFT(self,number):
         list_index = list(self.df.index)
         print(list_index)
         N = len(list_index) #サンプル数
+        aliasing = N/2
         dt = round(list_index[1] - list_index[0],2) #サンプリング間隔
         t = np.arange(0, N*dt, dt) # 時間軸
         list_index = list(t)
+        #freqList = np.fft.fftfreq(N, d=1.0/fs)  # 周波数軸の値を計算 fsはサンプリング周波数
         a_df = self.df.values
         # ここで一次元にする事でFFT出来るようにする。
         one_dimensional_a_df = np.ravel(a_df)
-        F = np.fft.fft(one_dimensional_a_df)
-        Amp = np.abs(F)
+        print(one_dimensional_a_df)
+        #F = np.fft.fft(one_dimensional_a_df)#フーリエ変換
+        F = np.fft.ifft(one_dimensional_a_df)#フーリエ逆変換
+        #print(F)
+        Amp = np.abs(F) #下とおんなじ
+        #Amp = [np.sqrt(c.real ** 2 + c.imag ** 2) for c in F]  # 振幅スペクトル
+        phaseSpectrum = [np.arctan2(int(c.imag), int(c.real)) for c in F]  # 位相スペクトル
         two_dimentional_Amp = np.reshape(Amp,(len(Amp),1))
-        self.df = pd.DataFrame(data=two_dimentional_Amp, index=list_index)
+        two_dimentional_phase = np.reshape(phaseSpectrum, (len(phaseSpectrum), 1))
+        #ここで振幅スペクトルか位相スペクトルかを選ぶ。
+        if number == 0:
+            self.df = pd.DataFrame(data=two_dimentional_Amp[:int(aliasing)], index=list_index[:int(aliasing)])
+        else:
+            self.df = pd.DataFrame(data=two_dimentional_phase, index=list_index)
         print(self.df)
         return
