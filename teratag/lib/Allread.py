@@ -9,12 +9,12 @@ rcParams.update({'figure.autolayout': True})
 thickness = ''
 
 class allread:
-    def __init__(self,method,thickness,final_filenum):
+    def __init__(self,method):
         #self.df = pd.read_table(file, engine='python')
         #self.file = file
         self.method = method
-        self.thickness = thickness
-        self.fianl_num = final_filenum
+        #self.thickness = thickness
+        #self.fianl_num = final_filenum
 
         #self.first_freq = first
         #self.last_freq = last
@@ -76,11 +76,11 @@ class allread:
         self.last_freq = last
         x_list = []
         self.df = self.df[first:last]
-        print(self.df)
+        #print(self.df)
         # self.min_max_normalization()
 
-        self.graph_Frequency_trans_reflect_is_TPG()
-        print(self.df)
+        #self.graph_Frequency_trans_reflect_is_TPG()
+        #print(self.df)
         for j in self.df.iloc[:, 0]:
             x_list.append(j)
 
@@ -88,6 +88,37 @@ class allread:
         x_all = np.array([x_list])
 
         return x_all
+
+    def Go_to_EX(self, file):
+        self.df = pd.read_table(file, engine = 'python', index_call = 0)
+        self.file = file
+        x_list = []
+
+    def Prepare_Machine_Learning(self,file,ref):
+        self.df = pd.read_table(file, engine='python',index_col=0)
+        self.file = file
+        x_list = []
+
+        df_ref = pd.read_table(ref, engine='python',index_col=0)
+        #print(df_ref)
+
+        #ここで強度を透過率に変化
+        self.df.iloc[:,0] = self.df.iloc[:,0]/df_ref.iloc[:,0]
+        self.df = self.df[first:last]
+        #self.Frequency_trans_reflect_is_TPG_FFT()
+        self.min_max_normalization()
+        #self.graph_Frequency_trans_reflect_is_TPG()
+        self.graph_Frequency_trans_reflect_is_TPG()
+        #print(self.df)
+        for j in self.df.iloc[:,0]:
+            x_list.append(j)
+
+        x_all = np.array([x_list])
+
+        return x_all, df_ref
+
+
+
 
     def Frequency_trans_reflect_is_TPG(self,file,ref,first,last):
         self.df = pd.read_table(file, engine='python',index_col=0)
@@ -97,20 +128,22 @@ class allread:
         x_list = []
 
         df_ref = pd.read_table(ref, engine='python',index_col=0)
+        #print(df_ref)
+
         #ここで強度を透過率に変化
         self.df.iloc[:,0] = self.df.iloc[:,0]/df_ref.iloc[:,0]
         self.df = self.df[first:last]
         #self.Frequency_trans_reflect_is_TPG_FFT()
         self.min_max_normalization()
         #self.graph_Frequency_trans_reflect_is_TPG()
-        self.graph_Frequency_trans_reflect_is_TPG_everymm('frequency[THz]','reflectance')
+        self.graph_Frequency_trans_reflect_is_TPG()
         #print(self.df)
         for j in self.df.iloc[:,0]:
             x_list.append(j)
 
-        x_all =  np.array([x_list])
+        x_all = np.array([x_list])
 
-        return x_all
+        return x_all, df_ref
 
     def graph_Frequency_trans_reflect(self):
         #print(matplotlib.rcParams['font.family'])
@@ -203,7 +236,7 @@ class allread:
         plt.ylabel(self.method)
         plt.title(self.file)
         #plt.show()
-
+        plt.close()
         return
 
     def graph_Frequency_trans_reflect_is_TPG_everymm(self,x,y):
@@ -234,7 +267,7 @@ class allread:
             plt.title(self.thickness)
             thickness = self.thickness
             #print(thickness)
-            plt.show()
+            #plt.show()
         return
 
     def min_max_normalization(self):

@@ -6,6 +6,7 @@ from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn import metrics
+from sklearn.decomposition import FastICA
 
 def svm(train_x, train_y, test_x, test_y):
     param_list = [0.00001, 0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000]
@@ -78,7 +79,7 @@ def pCA(x_all, y_all):
     # 主成分をプロットする
     for label in np.unique(targets):
         plt.scatter(transformed[targets == label, 0],
-                    transformed[targets == label, 1], label='{}mm'.format(label*0.5))
+                    transformed[targets == label, 1], )
     plt.legend(loc='upper right',
                bbox_to_anchor=(1,1),
                borderaxespad=0.5,fontsize = 10)
@@ -94,3 +95,36 @@ def pCA(x_all, y_all):
     plt.show()
 
     return transformed, targets
+
+def iCA(x_all, y_all):
+    # 独立成分の数＝24
+    decomposer = FastICA(n_components=2)
+    # データの平均を計算
+    M = np.mean(x_all, axis=1)[:, np.newaxis]
+    # 各データから平均を引く
+    data2 = x_all - M
+    # 平均0としたデータに対して、独立成分分析を実施
+    decomposer.fit(data2)
+
+    # 独立成分ベクトルを取得(D次元 x 独立成分数)
+    S = decomposer.transform(data2)
+    #プロットする
+    for label in np.unique(y_all):
+        plt.scatter(S[y_all == label, 0],
+                    S[y_all == label, 1], )
+    plt.legend(loc='upper right',
+               bbox_to_anchor=(1,1),
+               borderaxespad=0.5,fontsize = 10)
+    plt.title('principal component')
+    plt.xlabel('Ic1')
+    plt.ylabel('Ic2')
+
+    # 主成分の寄与率を出力する
+    #print('各次元の寄与率: {0}'.format(decomposer.explained_variance_ratio_))
+    #print('累積寄与率: {0}'.format(sum(decomposer.explained_variance_ratio_)))
+
+    # グラフを表示する
+    plt.show()
+
+
+    return S, y_all
