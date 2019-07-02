@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import os
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.ticker as tick
@@ -7,15 +8,19 @@ from matplotlib import rcParams
 from sklearn import preprocessing
 rcParams.update({'figure.autolayout': True})
 thickness = ''
+sample_init = 0
+
 
 class allread:
-    def __init__(self,method,thickness,final_filenum):
+    def __init__(self,method,thickness,type,sample,last_type,last_num):
         #self.df = pd.read_table(file, engine='python')
         #self.file = file
         self.method = method
         self.thickness = thickness
-        self.fianl_num = final_filenum
-
+        self.type = type
+        self.sample = sample
+        self.last_type = last_type
+        self.last_num = last_num
         #self.first_freq = first
         #self.last_freq = last
 # ファイルを読み込む。
@@ -70,6 +75,7 @@ class allread:
         return x_all
 
     def Frequency_Intencity_is_TPG(self, file, first, last):
+
         self.df = pd.read_table(file, engine='python', index_col=0)
         self.file = file
         self.first_freq = first
@@ -77,7 +83,7 @@ class allread:
         x_list = []
         self.df = self.df[first:last]
         print(self.df)
-        # self.min_max_normalization()
+        self.min_max_normalization()
 
         self.graph_Frequency_trans_reflect_is_TPG()
         print(self.df)
@@ -89,7 +95,9 @@ class allread:
 
         return x_all
 
+
     def Frequency_trans_reflect_is_TPG(self,file,ref,first,last):
+
         self.df = pd.read_table(file, engine='python',index_col=0)
         self.file = file
         self.first_freq = first
@@ -98,7 +106,7 @@ class allread:
 
         df_ref = pd.read_table(ref, engine='python',index_col=0)
         #ここで強度を透過率に変化
-        self.df.iloc[:,0] = self.df.iloc[:,0]/df_ref.iloc[:,0]
+        #self.df.iloc[:,0] = self.df.iloc[:,0]/df_ref.iloc[:,0]
         self.df = self.df[first:last]
         #self.Frequency_trans_reflect_is_TPG_FFT(0) #振幅スペクトルが欲しい場合はnumberを0、位相スペクトルが欲しい時はnumberを1
         self.min_max_normalization()
@@ -201,7 +209,7 @@ class allread:
         df.plot()
         plt.xlabel('周波数[THz]')
         plt.ylabel(self.method)
-        plt.title(self.file)
+        plt.title('type:'+str(self.type)+'sample:' + str(self.sample))
         #plt.show()
 
         return
@@ -209,32 +217,36 @@ class allread:
     def graph_Frequency_trans_reflect_is_TPG_everymm(self,x,y):
         global thickness
         global df
-        self.df.columns = [self.file[-5]]
-        plt.style.use('ggplot')
-        #print('thickness{}'.format(thickness))
-        #print('self.thickness{}'.format(self.thickness))
-        if thickness != self.thickness:
+        global sample_init
+
+
+        if sample_init == 0 and self.sample == 1:
+            sample_init = 1
+            self.df.columns = [self.sample]
             df = self.df
-            thickness = self.thickness
-            #print(df)
+            sample_init = 1
+        elif self.sample == 1:
+            plt.style.use('ggplot')
+            #print('plot')
+            df.plot(colormap='tab20')
+            plt.xlabel(x)
+            plt.ylabel(y)
+            plt.title(self.type-1)
+            plt.show()
+            self.df.columns = [self.sample]
+            df = self.df
+
         else:
+            self.df.columns = [self.sample]
             df = df.append(self.df)
-
-        
-        #print(self.file[-5])
-        #print(type(self.file[-5]))
-
-        if self.file[-5] == str(self.fianl_num):
-            #df.columns = [self.method]
-            #if self.file[-5] == '3'
-            #print(df)
+        if self.last_type == self.type and self.last_num == self.sample:
+            print('lastplot')
             df.plot()
             plt.xlabel(x)
             plt.ylabel(y)
-            plt.title(self.thickness)
-            thickness = self.thickness
-            #print(thickness)
-            plt.show()
+            plt.title(self.type)
+            plt.show(colormap='tab20')
+            #print(df)
         return
 
     def min_max_normalization(self):

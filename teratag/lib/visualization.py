@@ -66,27 +66,27 @@ def colorcode(best_pred, x, y):
             color_R = 255
             color_G = 255
             color_B = 255
-        print(i)
-        print(j)
+        #print(i)
+        #print(j)
 
 
         for k in range(y):
-            print('loopstart')
-            print(k)
-            print('kkk{}'.format(k))
-            print('x{}'.format(x))
-            print('i:{}'.format(i))
+            #print('loopstart')
+            #print(k)
+            #print('kkk{}'.format(k))
+            #print('x{}'.format(x))
+            #print('i:{}'.format(i))
             if int(i) < int(x) * int(k+1):
-                print('描けた')
-                print(position_x)
-                print(position_y)
-                print('k{}'.format(k))
-                print(j)
+                #print('描けた')
+                #print(position_x)
+                #print(position_y)
+                #print('k{}'.format(k))
+                #print(j)
                 draw.rectangle((position_x[k], position_y[k], position_x[k] + 100, position_y[k+1] - 10),
                                fill=(color_R, color_G, color_B))
                 position_x[k] += 110
                 break
-            print('描けなかった')
+            #print('描けなかった')
 
 
         '''
