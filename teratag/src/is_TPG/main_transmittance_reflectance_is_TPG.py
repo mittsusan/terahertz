@@ -8,24 +8,25 @@ from lib.machine_learning.classification import svm,kNN,pCA
 from lib.visualization import colorcode
 
 date_dir = '/Users/ryoya/kawaseken'
-shielding_material = '/cardboard2_denim2'
-sensitivity = ''
+shielding_material = '/cardboard'
+sensitivity = 'nosensitivity'
 from_frequency = 1.0
-to_frequency = 1.6
+to_frequency = 2.1
 thickness = 'mm'
 y_axis = 'intensity[a.u.]'
 y_all = []
 flag = 0
 #mainデータを読み込む。
 last_type = 6 #使用する種類
-last_num = 10 #最後の種類の使用するファイル数
+last_num = 4 #最後の種類の使用するファイル数
 
+#データの読み込み
 for i in range(1,last_type+1):
     #ここで厚みの選択及び糖
     #i = i*0.5
     for j in range(1,last_num+1):
         try:
-            x = allread(y_axis,str(i)+thickness,i,j,last_type,last_num).Frequency_trans_reflect_is_TPG(date_dir + shielding_material + '/' + str(i) + sensitivity + '/' + str(j) + '.txt',
+            x = allread(y_axis,str(i)+thickness,i,j,last_type,last_num).Frequency_trans_reflect_is_TPG(date_dir + shielding_material + '/' + sensitivity + '/' + str(i) + '/' + str(j) + '.txt',
                     date_dir + shielding_material + '/ref.txt',from_frequency,to_frequency)
 
             if flag == 0:
@@ -42,8 +43,8 @@ for i in range(1,last_type+1):
             print(e)
 
 #train_test_split(特徴量,目的関数,1つの厚さにおけるtrainデータの数)
-#train_x,train_y,test_x,test_y = train_test_split(x_all,y_all,1)
-train_x,train_y,test_x,test_y = decide_test_number(x_all,y_all,3)
+train_x,train_y,test_x,test_y = train_test_split(x_all,y_all,1)
+#train_x,train_y,test_x,test_y = decide_test_number(x_all,y_all,3)
 #train_x, test_x, train_y, test_y = train_test_split(x_all, y_all, test_size=3)
 
 print(type(train_x))
@@ -70,7 +71,7 @@ print('\nPCA-SVM')
 #厚みで識別する際はPCAの第3引数を0に
 transformed, targets = pCA(x_all, y_all,1)
 
-train_x_pca,train_y_pca,test_x_pca,test_y_pca = train_test_split(transformed,targets,1)
+train_x_pca,train_y_pca,test_x_pca,test_y_pca = decide_test_number(transformed,targets,3)
 
 best_pred = svm(train_x_pca, train_y_pca, test_x_pca, test_y_pca)
 colorcode(best_pred, width, length)

@@ -156,7 +156,7 @@ class allread:
 
         x_all = np.array([x_list])
 
-        return x_all, df_ref
+        return x_all
 
     def graph_Frequency_trans_reflect(self):
         #print(matplotlib.rcParams['font.family'])
@@ -279,12 +279,12 @@ class allread:
             df = df.append(self.df)
         if self.last_type == self.type and self.last_num == self.sample:
             print('lastplot')
-            df.plot()
+            df.plot(colormap='tab20')
             plt.xlabel(x)
             plt.ylabel(y)
 
             plt.title(self.type)
-            plt.show(colormap='tab20')
+            plt.show()
             #print(df)
 
         return

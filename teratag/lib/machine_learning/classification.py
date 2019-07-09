@@ -106,10 +106,9 @@ def pCA(x_all, y_all,number):
                 plt.scatter(transformed[targets == label, 0],
                             transformed[targets == label, 1], label='Glu_Lac_Mal')
 
-    plt.legend(loc='upper right',
-               bbox_to_anchor=(1,1),
-               borderaxespad=0.5,fontsize = 10)
-    plt.title('principal component')
+    #plt.legend(loc='upper right',bbox_to_anchor=(1,1),borderaxespad=0.5,fontsize = 10)
+    plt.legend(loc= 'best')
+    #plt.title('principal component')
     plt.xlabel('pc1(a.u.)')
     plt.ylabel('pc2(a.u.)')
 
