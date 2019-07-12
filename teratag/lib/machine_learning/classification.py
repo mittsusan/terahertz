@@ -88,6 +88,7 @@ def pCA(x_all, y_all,number,file_name_list):
         plt.xlabel('pc1(a.u.)')
         plt.ylabel('pc2(a.u.)')
         plt.legend(loc= 'best')
+        #plt.legend(bbox_to_anchor=(1, 0), loc='lower right', borderaxespad=1)
         plt.show()
 
         for index, (item, file_name) in enumerate(zip(targets, file_name_list)): #ファイル名も表記する。
