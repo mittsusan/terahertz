@@ -10,13 +10,13 @@ import pandas as pd
 import csv
 
 book = px.Workbook()
-book.save(r'/Users/toshinari/Desktop/python_excell/sample2.xlsx')
+#book.save(r'/Users/toshinari/Desktop/python_excell/sample3.xlsx')
 
 y_all = []
 flag = 0
 l = 0
 #使いたいフォルダの選択
-path_1 = '/Users/toshinari/Downloads/SVM_train/SVM_train_3'
+path_1 = '/Users/toshinari/Downloads/OneDrive_1_2019-6-28/20190628'
 plt.close()
 
 #med = ['lac_2', 'lac_3', 'lac_4', 'lac_5', 'lac_6']#対象の指定
@@ -53,4 +53,4 @@ x_all = x_all.T
 print(x_all)
 print(x_all.shape)
 #x_all = x_all.to_csv('/Users/toshinari/Desktop/python_excell/sample_writer.csv')
-x_all.to_excel('/Users/toshinari/Desktop/python_excell/sample_writer.xlsx')
+x_all.to_excel('/Users/toshinari/Desktop/python_excell/20180629_lac.xlsx')

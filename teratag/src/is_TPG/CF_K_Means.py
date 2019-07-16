@@ -30,7 +30,7 @@ for w in med:
     for j in sorted(glob.glob("{0}*.txt".format(w))):
 
         try:
-            x, ref = allread('Trans').Frequency_trans_reflect_is_TPG("{0}".format(j),"ref_s.txt", 1.05, 1.8)
+            x, ref = allread('Trans','a','b','c', 'd', 'e').Frequency_trans_reflect_is_TPG("{0}".format(j),"ref_s.txt", 1.05, 1.8)
             print(j)
             if flag == 0:
                 x_all = x

@@ -141,14 +141,14 @@ class allread:
         #print(df_ref)
 
         #ここで強度を透過率に変化
-        #self.df.iloc[:,0] = self.df.iloc[:,0]/df_ref.iloc[:,0]
+        self.df.iloc[:,0] = self.df.iloc[:,0]/df_ref.iloc[:,0]
         self.df = self.df[first:last]
         #self.Frequency_trans_reflect_is_TPG_FFT(0) #振幅スペクトルが欲しい場合はnumberを0、位相スペクトルが欲しい時はnumberを1
         self.min_max_normalization()
-        #self.graph_Frequency_trans_reflect_is_TPG()
+        self.graph_Frequency_trans_reflect_is_TPG()
 
 
-        self.graph_Frequency_trans_reflect_is_TPG_everymm('frequency[THz]',self.method)
+        #self.graph_Frequency_trans_reflect_is_TPG_everymm('frequency[THz]',self.method)
 
         #print(self.df)
         for j in self.df.iloc[:,0]:
@@ -248,7 +248,7 @@ class allread:
         plt.xlabel('周波数[THz]')
         plt.ylabel(self.method)
         plt.title('type:'+str(self.type)+'sample:' + str(self.sample))
-        #plt.show()
+        plt.show()
         plt.close()
         return
 
