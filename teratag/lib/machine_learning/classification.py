@@ -68,24 +68,52 @@ def kNN(train_x, train_y, test_x, test_y):
     return pred_y
 
 
-def pCA(x_all, y_all,number):
+def pCA(x_all, y_all,number,file_name_list):
     # 主成分分析する
+    #index_num = 1
     features = x_all
     targets = y_all
+    types = np.unique(targets)
     pca = PCA(n_components=2)
     pca.fit(features)
     # 分析結果を元にデータセットを主成分に変換する
     transformed = pca.fit_transform(features)
-    #print(transformed.shape)
-    #print(len(targets))
-    # print(transformed)
-    # 主成分をプロットする
+    # 主成分の寄与率を出力する
+    print('各次元の寄与率: {0}'.format(pca.explained_variance_ratio_))
+    print('累積寄与率: {0}'.format(sum(pca.explained_variance_ratio_)))
 
-    if number == 0:
-        for label in np.unique(targets):
+    # 主成分をプロットする
+    if number == 0: #厚みの場合
+
+        for label in np.unique(targets): #厚さのみのPCA
             plt.scatter(transformed[targets == label, 0],
                         transformed[targets == label, 1], label='{}mm'.format(label*0.5))
-    else:
+        plt.xlabel('pc1(a.u.)')
+        plt.ylabel('pc2(a.u.)')
+        plt.legend(loc= 'best')
+        #plt.legend(bbox_to_anchor=(1, 0), loc='lower right', borderaxespad=1)
+        plt.show()
+
+        for index, (item, file_name) in enumerate(zip(targets, file_name_list)): #ファイル名も表記する。
+            if item == 1:
+                plt.scatter(transformed[index, 0],
+                            transformed[index, 1], marker="${}$".format(file_name), c ='blue')
+            if item == 2:
+                plt.scatter(transformed[index, 0],
+                            transformed[index, 1], marker="${}$".format(file_name), c ='orange')
+
+            elif item == 3:
+                plt.scatter(transformed[index, 0],
+                            transformed[index, 1], marker="${}$".format(file_name), c ='green')
+            elif item == 4:
+                plt.scatter(transformed[index, 0],
+                            transformed[index, 1], marker="${}$".format(file_name), c ='red')
+        plt.xlabel('pc1(a.u.)')
+        plt.ylabel('pc2(a.u.)')
+        plt.legend(loc='best')
+        plt.show()
+
+    else: #糖類の場合
         for label in np.unique(targets):
             if label == 1:
                 plt.scatter(transformed[targets == label, 0],
@@ -108,20 +136,35 @@ def pCA(x_all, y_all,number):
             elif label == 7:
                 plt.scatter(transformed[targets == label, 0],
                             transformed[targets == label, 1], label='Glu_Lac_Mal')
+        plt.xlabel('pc1(a.u.)')
+        plt.ylabel('pc2(a.u.)')
+        plt.legend(loc='best')
+        plt.show()
 
-    plt.legend(loc='upper right',
-               bbox_to_anchor=(1,1),
-               borderaxespad=0.5,fontsize = 10)
-    plt.title('principal component')
-    plt.xlabel('pc1(a.u.)')
-    plt.ylabel('pc2(a.u.)')
+        for index, (item, file_name) in enumerate(zip(targets, file_name_list)):  # ファイル名も表記する。
+            if item == 1:
+                plt.scatter(transformed[index, 0],
+                            transformed[index, 1], marker="${}$".format(file_name), c='blue')
+            if item == 2:
+                plt.scatter(transformed[index, 0],
+                            transformed[index, 1], marker="${}$".format(file_name), c='orange')
 
-    # 主成分の寄与率を出力する
-    print('各次元の寄与率: {0}'.format(pca.explained_variance_ratio_))
-    print('累積寄与率: {0}'.format(sum(pca.explained_variance_ratio_)))
-
-    # グラフを表示する
-    plt.show()
+            elif item == 3:
+                plt.scatter(transformed[index, 0],
+                            transformed[index, 1], marker="${}$".format(file_name), c='green')
+            elif item == 4:
+                plt.scatter(transformed[index, 0],
+                            transformed[index, 1], marker="${}$".format(file_name), c='red')
+            elif item == 5:
+                plt.scatter(transformed[index, 0],
+                            transformed[index, 1], marker="${}$".format(file_name), c='purple')
+            elif item == 6:
+                plt.scatter(transformed[index, 0],
+                            transformed[index, 1], marker="${}$".format(file_name), c='light blue')
+        plt.xlabel('pc1(a.u.)')
+        plt.ylabel('pc2(a.u.)')
+        plt.legend(loc='best')
+        plt.show()
 
     return transformed, targets
 
