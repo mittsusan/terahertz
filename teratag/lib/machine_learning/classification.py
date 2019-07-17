@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn import metrics
 from sklearn.decomposition import FastICA
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import confusion_matrix
 
 def svm(train_x, train_y, test_x, test_y):
     param_list = [0.00001, 0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000]
@@ -45,6 +47,61 @@ def svm(train_x, train_y, test_x, test_y):
     print('Best pred:{}'.format(best_pred))
 
     return best_pred
+
+def svm_gridsearchcv(train_x, train_y, test_x, test_y):
+    ### 探索するパラメータ空間
+    def param():
+        ret = {
+            'C': np.linspace(0.0001, 1000, 10),
+            'kernel': ['rbf', 'linear', 'poly'],
+            'degree': np.arange(1, 6, 1),
+            'gamma': np.linspace(0.0001, 1000, 10)
+        }
+        return ret
+    # GridSearchCVのインスタンスを作成&学習&スコア記録
+    gscv_one = GridSearchCV(SVC(), param(), cv=3,return_train_score=False, verbose=0)
+    gscv_one.fit(train_x, train_y)
+    # 最高性能のモデルを取得
+    best_one_vs_one = gscv_one.best_estimator_
+    best_pred_one = best_one_vs_one.predict(test_x)
+    oneone_score = accuracy_score(test_y, best_pred_one)
+    parameters_one =gscv_one.best_params_
+    ##one_versus_the_rest
+    classifier = OneVsRestClassifier(estimator=SVC())
+    parameters = {
+        'estimator__C': np.linspace(0.0001, 1000, 10),
+        'estimator__kernel': ['rbf', 'linear', 'poly'],
+        'estimator__degree': np.arange(1, 6, 1),
+        'estimator__gamma': np.linspace(0.0001, 1000, 10)
+    }
+    gscv_rest = GridSearchCV(estimator = classifier,param_grid = parameters,cv=3,return_train_score=False, verbose=0)
+    gscv_rest.fit(train_x, train_y)
+    # 最高性能のモデルを取得
+    best_one_vs_rest = gscv_rest.best_estimator_
+    best_pred_rest = best_one_vs_rest.predict(test_x)
+    onerest_score = accuracy_score(test_y, best_pred_rest)
+    parameters_rest =gscv_rest.best_params_
+
+    if oneone_score > onerest_score:
+        best_score = oneone_score
+        best_compare = 'One-versus-one'
+        best_pred = best_pred_one
+        best_parameters = parameters_one
+    else:
+        best_score = onerest_score
+        best_compare = 'One-versus-the-rest'
+        best_pred = best_pred_rest
+        best_parameters = parameters_rest
+
+    print('Best score: {}'.format(best_score))
+    print('Best parameters: {}'.format(best_parameters))
+    print('比較方法:{}'.format(best_compare))
+    print('Best pred:{}'.format(best_pred))
+    # 混同行列を出力
+    #print(confusion_matrix(test_y, best_pred))
+    return best_pred
+
+
 
 
 def kNN(train_x, train_y, test_x, test_y):
@@ -157,7 +214,7 @@ def pCA(x_all, y_all,number,file_name_list):
                             transformed[index, 1], marker="${}$".format(file_name), c='purple')
             elif item == 6:
                 plt.scatter(transformed[index, 0],
-                            transformed[index, 1], marker="${}$".format(file_name), c='light blue')
+                            transformed[index, 1], marker="${}$".format(file_name), c='brown')
         plt.xlabel('pc1(a.u.)')
         plt.ylabel('pc2(a.u.)')
         plt.legend(loc='best')
