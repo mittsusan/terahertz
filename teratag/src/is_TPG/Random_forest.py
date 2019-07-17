@@ -96,11 +96,11 @@ f3 = f2.ix[:, 'number']
 df = pd.read_csv(file_list[k], engine='python', header=None, sep=',')
 #print(int((first-0.8)*100+1))
 #print(int((last-0.8)*100+2))
-df = df[int((first-0.8)*100+1):int((last-0.8)*100+2)]#周波数の値を位置に直したかった。なんか他に方法あるかもやけどめんどかったからこうしてる。改善してくれ。
+df = df[int((first-0.8)*100+1):int((last-0.8)*100+2)]#周波数の値を1に直したかった。なんか他に方法あるかもやけどめんどかったからこうしてる。改善してくれ。
 df_np_2 = df.values
 df_np2 = df_np_2[:,0]
 X_all2 = np.insert(X_all.T, 0, df_np2, axis = 0)#多次元配列に一次元配列を追加する場合はappendやstackでは無理。insertを使う
-#print(X_all2)
+print(X_all2)
 
 
 #print('Feature Importances:')

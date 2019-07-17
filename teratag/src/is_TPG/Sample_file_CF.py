@@ -56,7 +56,7 @@ A,B = pCA(X_all.T,y_all)
 print('\nICA')
 C,D = iCA(X_all.T,y_all)
 
-clf = RandomForestClassifier(n_estimators=20, random_state=42)
+clf = RandomForestClassifier(n_estimators=40, random_state=42)
 clf.fit(X_train, y_train)
 
 #予測データ作成
