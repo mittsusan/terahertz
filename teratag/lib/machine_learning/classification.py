@@ -7,9 +7,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn import metrics
 from sklearn.decomposition import FastICA
+import numpy as np
+import scipy.stats as stats
+
 
 def svm(train_x, train_y, test_x, test_y):
-    param_list = [0.00001, 0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000]
+    param_list = [0.00001, 0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000,10000]
     best_score = 0
     best_parameters = {}
     kernel = 'rbf'
@@ -48,7 +51,7 @@ def svm(train_x, train_y, test_x, test_y):
 
 
 def kNN(train_x, train_y, test_x, test_y):
-    k_list = [1]  # k の数（今回は訓練データが1つずつなので、1のみ）
+    k_list = [3]  # k の数（今回は訓練データが1つずつなので、1のみ）
     weights_list = ['uniform', 'distance']  # 今回は訓練データが一つなので、このパラメータは関係なくなる。
     for weights in weights_list:
         for k in k_list:
@@ -197,3 +200,21 @@ def iCA(x_all, y_all):
 
 
     return S, y_all
+
+#def RF(train_x,train_y):
+
+
+#
+def smirnov_grubbs(data, alpha):
+    x, o = list(data), []
+    while True:
+        n = len(x)
+        t = stats.t.isf(q=(alpha / n) / 2, df=n - 2)
+        tau = (n - 1) * t / np.sqrt(n * (n - 2) + n * t * t)
+        i_min, i_max = np.argmin(x), np.argmax(x)
+        myu, std = np.mean(x), np.std(x, ddof=1)
+        i_far = i_max if np.abs(x[i_max] - myu) > np.abs(x[i_min] - myu) else i_min
+        tau_far = np.abs((x[i_far] - myu) / std)
+        if tau_far < tau: break
+        o.append(x.pop(i_far))
+    return (np.array(x), np.array(o))

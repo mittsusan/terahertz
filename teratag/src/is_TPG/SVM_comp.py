@@ -8,11 +8,6 @@ from lib.Allread import allread
 from sklearn.cluster import KMeans
 from lib.train_test_split import train_test_split
 from lib.machine_learning.classification import svm,kNN,pCA
-
-#from sklearn.model_selection import train_test_split
-from sklearn import preprocessing
-from sklearn.cluster import KMeans
-
 #データを大量に読み込んでラベルづけを行うプログラム
 plt.close()
 y_all = []
@@ -38,7 +33,7 @@ for i in range(1,num+1):
         for j in sorted(glob.glob("{0}*.txt".format(w))):
 
             try:
-                x, ref = allread('Trans').Frequency_trans_reflect_is_TPG("{0}".format(j),"ref_s.txt", 1.05, 1.8)
+                x, ref = allread('Trans','a','b','c', 'd', 'e').Frequency_trans_reflect_is_TPG("{0}".format(j),"ref_s.txt", 1.05, 1.8)
                 print(j)
                 if flag == 0:
                     x_all = x
@@ -49,17 +44,13 @@ for i in range(1,num+1):
                 y_all.append(l)
             except FileNotFoundError as e:
                 print(e)
-        if w == a:
-            l = l
-        elif w == b:
-            l = l + 1
-        else
-            l = l + 2
+        l = l + 1
+
 
     i = i + 1
     k = k + 1
     m = m + 1
-
+print(x_all)
 #pred = KMeans(n_clusters=2).fit_predict(x_all)
 y_all = np.array(y_all)
 #print(pred)
