@@ -6,6 +6,10 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as tick
 from matplotlib import rcParams
 from sklearn import preprocessing
+import sys
+sys.path.append('../')
+from lib.change_db import change_db
+
 rcParams.update({'figure.autolayout': True})
 thickness = ''
 sample_init = 0
@@ -13,13 +17,16 @@ sample_init = 0
 
 class allread:
 
-   
-
-
-    def __init__(self,method,thickness,type,sample,last_type,last_num,first,last,frequency_list):
+    def __init__(self,method = 0,thickness = '1.0mm',type = 3,sample = 3,last_type = 3,last_num = 3,first = 0.8,last = 2.6,frequency_list = []):
         #self.df = pd.read_table(file, engine='python')
         #self.file = file
-        self.method = method
+        if method == 0:
+            y_axis = 'intensity[a.u.]'
+        elif method == 1:
+            y_axis = 'transmittance'
+        elif method == 2:
+            y_axis = 'reflectance'
+        self.method = y_axis
         self.thickness = thickness
         self.type = type
         self.sample = sample
@@ -142,7 +149,11 @@ class allread:
         #print(df_ref)
 
         #ここで強度を透過率に変化
-        self.df.iloc[:,0] = self.df.iloc[:,0]/df_ref.iloc[:,0]
+        if self.method == 'intensity[a.u.]':
+            pass
+        elif self.method == 'transmittance' or self.method == 'reflectance':
+            self.df.iloc[:, 0] = self.df.iloc[:, 0] / df_ref.iloc[:, 0]
+
 
 
         if not self.frequency_list:
@@ -152,10 +163,12 @@ class allread:
 
         #self.Frequency_trans_reflect_is_TPG_FFT(0) #振幅スペクトルが欲しい場合はnumberを0、位相スペクトルが欲しい時はnumberを1
         self.min_max_normalization()
-        self.graph_Frequency_trans_reflect_is_TPG()
+
+        self.df = change_db(self.df)
+        #self.graph_Frequency_trans_reflect_is_TPG()
 
 
-        #self.graph_Frequency_trans_reflect_is_TPG_everymm('frequency[THz]',self.method)
+        self.graph_Frequency_trans_reflect_is_TPG_everymm('frequency[THz]',self.method)
 
         #print(self.df)
         for j in self.df.iloc[:,0]:
@@ -260,7 +273,6 @@ class allread:
         return
 
     def graph_Frequency_trans_reflect_is_TPG_everymm(self,x,y):
-        global thickness
         global df
         global sample_init
 
@@ -300,7 +312,7 @@ class allread:
         list_index = list(self.df.index)
         x = self.df.values  # returns a numpy array
         #print(x)
-        min_max_scaler = preprocessing.MinMaxScaler()
+        min_max_scaler = preprocessing.MinMaxScaler(feature_range=(0.01,1.01))
         x_scaled = min_max_scaler.fit_transform(x)
         #for n in self.drange(self.first_freq,self.last_freq,0.01):
             #list_index.append(n)
