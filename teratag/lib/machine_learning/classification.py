@@ -10,7 +10,34 @@ from sklearn.decomposition import FastICA
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import confusion_matrix
 import scipy.stats as stats
+from sklearn.ensemble import RandomForestClassifier
+import numpy as np
+import pandas as pd
 
+def randomforest(train_x, train_y, test_x, test_y, from_frequency, to_frequency, frequency_list):
+    # use a full grid over all parameters
+    param_grid = {"n_estimators": np.arange(50,300,10)}
+
+    forest_grid = GridSearchCV(estimator=RandomForestClassifier(random_state=0,bootstrap = True),
+                               param_grid=param_grid,
+                               cv=3)
+    forest_grid.fit(train_x, train_y)  # fit
+    forest_grid_best = forest_grid.best_estimator_  # best estimator
+    best_pred = forest_grid_best.predict(test_x)
+    best_score = accuracy_score(best_pred, test_y)
+    print("Best Model Parameter: ", forest_grid.best_params_)
+    print('Best score: {}'.format(best_score))
+    # 特徴量の重要度
+    feature_importances = forest_grid_best.feature_importances_
+    plt.figure(figsize=(10, 5))
+    y = feature_importances
+    x = np.arange(from_frequency,to_frequency+0.01,0.01)
+    plt.bar(x, y, width = 0.005, align="center")
+    plt.xlabel('frequency[THz]')
+    plt.ylabel('feature importance')
+    plt.show()
+
+    return best_pred
 
 
 def svm(train_x, train_y, test_x, test_y):
@@ -108,8 +135,9 @@ def svm_gridsearchcv(train_x, train_y, test_x, test_y):
 
 
 def kNN(train_x, train_y, test_x, test_y):
-    k_list = [3]  # k の数（今回は訓練データが1つずつなので、1のみ）
-    weights_list = ['uniform', 'distance']  # 今回は訓練データが一つなので、このパラメータは関係なくなる。
+    k_list = [1,2,3]  # k の数
+    weights_list = ['uniform', 'distance']
+    ac_score_compare = 0
     for weights in weights_list:
         for k in k_list:
             clf = neighbors.KNeighborsClassifier(k, weights=weights)
@@ -119,8 +147,21 @@ def kNN(train_x, train_y, test_x, test_y):
             ac_score = metrics.accuracy_score(pred_y, test_y)
             # print(type(k))
             # print(type(iris_y_test))
-            print('k={0},weight={1}'.format(k, weights))
-            print('正答率 =', ac_score)
+
+
+            if ac_score_compare == 0:
+                ac_score_compare = ac_score
+                best_pred = pred_y
+                best_k = k
+                best_weight = weights
+                best_accuracy = ac_score
+            elif ac_score_compare < ac_score:
+                best_pred = pred_y
+                best_k = k
+                best_weight = weights
+                best_accuracy = ac_score
+    print('k={0},weight={1}'.format(best_k, best_weight))
+    print('正答率 =', best_accuracy)
 
     return pred_y
 

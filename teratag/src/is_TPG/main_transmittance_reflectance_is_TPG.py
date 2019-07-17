@@ -4,7 +4,7 @@ sys.path.append('../../')
 from lib import allread
 from lib import train_test_split,decide_test_number
 #from sklearn.model_selection import train_test_split
-from lib import svm,kNN,pCA,svm_gridsearchcv
+from lib import svm,kNN,pCA,svm_gridsearchcv,randomforest
 from lib import colorcode
 #######測定物の度に変更して下さい
 date_dir = '/Users/ryoya/kawaseken'
@@ -67,6 +67,10 @@ print(type(train_y))
 #referenceのカラーコード
 
 colorcode(test_y,width,length)
+#RF
+print('\nRF')
+best_pred=randomforest(train_x,train_y,test_x,test_y,from_frequency,to_frequency,frequency_list)
+colorcode(best_pred,width,length)
 #SVM
 print('\nSVM')
 best_pred=svm(train_x,train_y,test_x,test_y)

@@ -140,12 +140,12 @@ class allread:
 
     def Frequency_trans_reflect_is_TPG(self,file,ref):
 
-        self.df = pd.read_table(file, engine='python',index_col=0)
+        self.df = pd.read_table(file, engine='python',index_col=0,header=None)
         self.file = file
-
+        #print(self.df)
         x_list = []
 
-        df_ref = pd.read_table(ref, engine='python',index_col=0)
+        df_ref = pd.read_table(ref, engine='python',index_col=0,header=None)
         #print(df_ref)
 
         #ここで強度を透過率に変化
@@ -164,7 +164,7 @@ class allread:
         #self.Frequency_trans_reflect_is_TPG_FFT(0) #振幅スペクトルが欲しい場合はnumberを0、位相スペクトルが欲しい時はnumberを1
         self.min_max_normalization()
 
-        self.df = change_db(self.df)
+        #self.df = change_db(self.df)
         #self.graph_Frequency_trans_reflect_is_TPG()
 
 
