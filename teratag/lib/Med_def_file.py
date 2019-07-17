@@ -52,9 +52,11 @@ def Label_Sample_File(sample_list,first,last):
     return y_all, X_all, file_list
 
 
-def Trans_file(file, ref):
-    df = pd.read_csv(file, engine='python', header=None, index_col=0, sep=',')
-    df_ref = pd.read_csv(ref, engine='python', header=None, index_col=0, sep=',')
+def Trans_file(file, ref,first,last):
+    df = pd.read_csv(file, engine='python', header=None, index_col=0, sep='\t')
+    df = df[first:last]
+    df_ref = pd.read_csv(ref, engine='python', header=None, index_col=0, sep='\t')
+    df_ref = df_ref[first:last]
     # ここで強度を透過率に変化
     df.iloc[:, 0] = df.iloc[:, 0] / df_ref.iloc[:, 0]
     trans = df
