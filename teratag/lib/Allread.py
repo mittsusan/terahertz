@@ -16,7 +16,7 @@ class allread:
    
 
 
-    def __init__(self,method,thickness,type,sample,last_type,last_num):
+    def __init__(self,method,thickness,type,sample,last_type,last_num,first,last,frequency_list):
         #self.df = pd.read_table(file, engine='python')
         #self.file = file
         self.method = method
@@ -25,7 +25,9 @@ class allread:
         self.sample = sample
         self.last_type = last_type
         self.last_num = last_num
-
+        self.frequency_list = frequency_list
+        self.first_freq = first
+        self.last_freq = last
         #self.first_freq = first
         #self.last_freq = last
 # ファイルを読み込む。
@@ -129,12 +131,11 @@ class allread:
 
 
 
-    def Frequency_trans_reflect_is_TPG(self,file,ref,first,last):
+    def Frequency_trans_reflect_is_TPG(self,file,ref):
 
         self.df = pd.read_table(file, engine='python',index_col=0)
         self.file = file
-        self.first_freq = first
-        self.last_freq = last
+
         x_list = []
 
         df_ref = pd.read_table(ref, engine='python',index_col=0)
@@ -142,7 +143,13 @@ class allread:
 
         #ここで強度を透過率に変化
         self.df.iloc[:,0] = self.df.iloc[:,0]/df_ref.iloc[:,0]
-        self.df = self.df[first:last]
+
+
+        if not self.frequency_list:
+            self.df = self.df[self.first_freq:self.last_freq]
+        else:
+            self.df = self.df.loc[self.frequency_list]
+
         #self.Frequency_trans_reflect_is_TPG_FFT(0) #振幅スペクトルが欲しい場合はnumberを0、位相スペクトルが欲しい時はnumberを1
         self.min_max_normalization()
         self.graph_Frequency_trans_reflect_is_TPG()
@@ -156,7 +163,7 @@ class allread:
 
         x_all = np.array([x_list])
 
-        return x_all, df_ref
+        return x_all
 
     def graph_Frequency_trans_reflect(self):
         #print(matplotlib.rcParams['font.family'])
@@ -279,12 +286,12 @@ class allread:
             df = df.append(self.df)
         if self.last_type == self.type and self.last_num == self.sample:
             print('lastplot')
-            df.plot()
+            df.plot(colormap='tab20')
             plt.xlabel(x)
             plt.ylabel(y)
 
             plt.title(self.type)
-            plt.show(colormap='tab20')
+            plt.show()
             #print(df)
 
         return
