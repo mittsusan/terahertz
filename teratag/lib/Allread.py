@@ -155,12 +155,15 @@ class allread:
             self.df.iloc[:, 0] = self.df.iloc[:, 0] / df_ref.iloc[:, 0]
 
 
+
         if not self.frequency_list:
             self.df = self.df[self.first_freq:self.last_freq]
         else:
             self.df = self.df.loc[self.frequency_list]
+
         #self.Frequency_trans_reflect_is_TPG_FFT(0) #振幅スペクトルが欲しい場合はnumberを0、位相スペクトルが欲しい時はnumberを1
         self.min_max_normalization()
+
         self.df = change_db(self.df)
         #self.graph_Frequency_trans_reflect_is_TPG()
 
@@ -265,7 +268,7 @@ class allread:
         plt.xlabel('周波数[THz]')
         plt.ylabel(self.method)
         plt.title('type:'+str(self.type)+'sample:' + str(self.sample))
-        #plt.show()
+        plt.show()
         plt.close()
         return
 
