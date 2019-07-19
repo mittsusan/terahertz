@@ -63,6 +63,16 @@ def Trans_file(file, ref,first,last):
     # self.Frequency_trans_reflect_is_TPG_FFT(0) #振幅スペクトルが欲しい場合はnumberを0、位相スペクトルが欲しい時はnumberを1
     return trans
 
+def Trans_file_normal(file, ref):
+    df = pd.read_csv(file, engine='python', header=None, index_col=0, sep='\t')
+
+    df_ref = pd.read_csv(ref, engine='python', header=None, index_col=0, sep='\t')
+    # ここで強度を透過率に変化
+    df.iloc[:, 0] = df.iloc[:, 0] / df_ref.iloc[:, 0]
+    trans = df
+    # self.Frequency_trans_reflect_is_TPG_FFT(0) #振幅スペクトルが欲しい場合はnumberを0、位相スペクトルが欲しい時はnumberを1
+    return trans
+
 
 def Graph_Trans_file(file,first,last):
     df = pd.read_csv(file, engine='python', header=None, index_col=0, sep=',')
@@ -173,75 +183,106 @@ def iCA(x_all, y_all):
 
     return S, y_all
 
-'''
-    if number == 0:
-        for label in np.unique(targets):
-            plt.scatter(transformed[targets == label, 0],
-                        transformed[targets == label, 1], label='{}mm'.format(label*0.5))
-    else:
-        for label in np.unique(targets):
-            if label == 1:
-                plt.scatter(transformed[targets == label, 0],
-                            transformed[targets == label, 1], label='Glucose')
-            elif label == 2:
-                plt.scatter(transformed[targets == label, 0],
-                            transformed[targets == label, 1], label='Lactose')
-            elif label == 3:
-                plt.scatter(transformed[targets == label, 0],
-                            transformed[targets == label, 1], label='Maltose')
-            elif label == 4:
-                plt.scatter(transformed[targets == label, 0],
-                            transformed[targets == label, 1], label='Glu_Lac')
-            elif label == 5:
-                plt.scatter(transformed[targets == label, 0],
-                            transformed[targets == label, 1], label='Lac_Mal')
-            elif label == 6:
-                plt.scatter(transformed[targets == label, 0],
-                            transformed[targets == label, 1], label='Mal_Glu')
-            elif label == 7:
-                plt.scatter(transformed[targets == label, 0],
-                            transformed[targets == label, 1], label='Glu_Lac_Mal')
 
-    plt.legend(loc='upper right',
-               bbox_to_anchor=(1,1),
-               borderaxespad=0.5,fontsize = 10)
-    plt.title('principal component')
-    plt.xlabel('pc1(a.u.)')
-    plt.ylabel('pc2(a.u.)')
+def Classfication_folder(Input_path, Resalt_path, Ref_file_name, remove = 'OFF'):
+    #データを大量に読み込んで遮蔽物毎にサンプルをフォルダ分けするプログラム
+    #MacOSにのみ対応状態。Winは視野の方の注釈を見て考えてください
+    # データを大量に読み込んで遮蔽物毎にサンプルをフォルダ分けするプログラム
 
-    # 主成分の寄与率を出力する
-    print('各次元の寄与率: {0}'.format(pca.explained_variance_ratio_))
-    print('累積寄与率: {0}'.format(sum(pca.explained_variance_ratio_)))
+    plt.close()
 
-    # グラフを表示する
-    plt.show()
-'''
-'''
-def PCA_found(file):#PCA出力し、プロットする関数
-    pca = PCA(n_components=2)
-    pca.fit(file)
-    transformed = pca.fit_transform(file)
-    plt.scatter(transformed[])
+    File = ['Intencity', 'Trans']
 
-'''
+    Teacher = os.chdir(Input_path)  # 遮蔽物の種類毎にサンプルを分類したいとき用
+    if os.path.exists(Input_path + '/.DS_Store'):
+        os.remove(Input_path + '/.DS_Store')
+    directory = os.listdir(Teacher)
+    # print(directory)
+    directory = sorted(directory)
+    #print(directory)
+    len_dir = len(directory)
+    # print(len_dir)
+
+    # print(directory[2])
+    # 以下MacOSでの特殊な処理。MacOSではフォルダ内に複数のフォルダが存在すると謎のファイルDS_Storeが自動で生成される。Windowsで実行する場合はfor文のrange内の-1を消す。そしてchoice_dirの+1を消す
+
+    for i in range(0, len_dir):
+        date_dir = directory[i]
+        #print(date_dir)
+        os.chdir(Input_path + '/{}'.format(date_dir))
+        #print(os.getcwd())
+        dir_list = sorted(os.listdir(Input_path + '/{}'.format(date_dir)))
+        Ref_path = Input_path + '/{}'.format(date_dir) + '/' + Ref_file_name
+        #print(os.getcwd())
+        shield_list = [n for n in dir_list if not n.count('.txt')]
+        if os.path.exists(Input_path + '/{}'.format(date_dir) + '/.DS_Store'):
+            os.remove(Input_path + '/{}'.format(date_dir) + '/.DS_Store')
+
+        # print(n)
+        #print('\n遮蔽物リスト')
+        #print(shield_list)
+
+        for x in range(0, len(shield_list)):
+            if os.path.exists(Input_path + '/{}/{}'.format(date_dir, shield_list[x]) + '/.DS_Store'):
+                os.remove(Input_path + '/{}/{}'.format(date_dir, shield_list[x]) + '/.DS_Store')
+
+            os.chdir(Input_path + '/{}/{}'.format(date_dir, shield_list[x]))
+
+            if os.path.exists(Resalt_path + '/{}/'.format(shield_list[x])) == False:
+                os.mkdir(Resalt_path + '/{}/'.format(shield_list[x]))
+                os.chdir(Resalt_path + '/{}/'.format(shield_list[x]))
+                os.mkdir(File[0])
+                os.mkdir(File[1])
+            else:
+                os.chdir(Resalt_path + '/{}/'.format(shield_list[x]))
+                print('Exist')
+            med_list = sorted(os.listdir(Input_path + '/{}/{}'.format(date_dir, shield_list[x])))  # ディレクトリをソートして取得
+
+            med_list = [n for n in med_list if not n.count('.txt')]
+            #print('\t遮蔽物の中のサンプルリスト')
+            #print(med_list)
+            med = med_list
+
+            for m in range(0, len(File)):
+                os.chdir(Resalt_path + '/{}/'.format(shield_list[x]))
+                a = os.chdir('{}'.format(File[m]))
+                #print('\n現在地')
+                #print(os.getcwd())
+
+                for j in med:
+                    os.chdir(Resalt_path + '/{}/{}'.format(shield_list[x], File[m]))
+
+                    if os.path.exists('{}'.format(j)) == False:
+                        os.mkdir('{}'.format(j))
+
+                    if os.path.exists(Input_path + '/{}/{}/{}'.format(date_dir, shield_list[x], j)) == False:
+                        print('\tThis sample do not exist in {} folder'.format(date_dir))
+
+                    else:
+                        os.chdir(Input_path + '/{}/{}/{}'.format(date_dir, shield_list[x], j))
+
+                        if m == 0:
+                            # os.chdir(Resalt_path + '/{}/{}'.format(shield_list[1], File[m]))
+                            for k in sorted(glob.glob("*.txt")):
+                                df = pd.read_csv(k, engine='python', header=None, index_col=0, sep=',')
+
+                                df.to_csv(
+                                    Resalt_path + '/{0}/Intencity/{1}/Intencity_{2}_{3}.csv'.format(
+                                        shield_list[x], j, k.rstrip(".txt"), date_dir), sep=",")
 
 
 
-'''
+                        elif m == 1:
+                            # os.chdir(Resalt_path + '/{}/{}'.format(shield_list[1], File[m]))
+                            for k in sorted(glob.glob("*.txt")):
+                                trans = Trans_file_normal(k, Ref_path)
 
-    plt.scatter(transformed[y_all == label, 0],
-                transformed[y_all == label, 1], )
-plt.legend(loc='upper right',
-           bbox_to_anchor=(1, 1),
-           borderaxespad=0.5, fontsize=10)
-plt.title('principal component')
-plt.xlabel('Ic1')
-plt.ylabel('Ic2')
+                                #print(type(trans))
+                                trans.to_csv(
+                                    Resalt_path + '/{0}/Trans/{1}/Trans_{2}_{3}.csv'.format(
+                                        shield_list[x], j, k.rstrip(".txt"), date_dir), sep=",")
+                                if remove == 'ON':
+                                    os.remove('/Users/toshinari/Downloads/SVM_file/INPUT_2/{}/{}/{}'.format(date_dir,shield_list[x], k))
 
-# 主成分の寄与率を出力する
-# print('各次元の寄与率: {0}'.format(decomposer.explained_variance_ratio_))
-# print('累積寄与率: {0}'.format(sum(decomposer.explained_variance_ratio_)))
 
-# グラフを表示する
-plt.show()
-'''
+    return
