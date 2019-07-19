@@ -7,8 +7,8 @@ import sys
 sys.path.append('../../')
 from sklearn.model_selection import train_test_split
 from lib.machine_learning.classification import svm,kNN
-from lib.Change_Trans import Max_Min
-from lib.Change_Trans import pCA,iCA
+from lib.Med_def_file import Max_Min
+from lib.Med_def_file import pCA,iCA
 from sklearn.pipeline import make_pipeline
 from skrebate import ReliefF
 from sklearn.ensemble import RandomForestClassifier
@@ -21,8 +21,10 @@ import os
 import matplotlib.pyplot as plt
 import sys
 sys.path.append('../')
-from lib.Change_Trans import Trans_file
+from lib.Med_def_file import Trans_file
 
+
+#一つのフォルダを読み込むもの。基本使わない
 #データを大量に読み込んでラベルづけを行うプログラム
 plt.close()
 y_all = []
@@ -65,7 +67,7 @@ for i in range(0,len_dir-1):
             for k in sorted(glob.glob("{0}*.txt".format(j))):
                 df = pd.read_csv(k, engine='python', header=None, index_col=0, sep='\t')
                 #以下２行は別ファイルで定義した関数
-                trans = Trans_file(k,"ref_s.txt")
+                trans = Trans_file(k,"ref_s.txt",first,last)
                 #print(type(trans))
                 trans.to_csv("/Users/toshinari/Downloads/A_RESALT/Trans/{0}/Trans_{1}_{2}.csv".format(j,k.rstrip(".txt"),choice_dir), sep = ",")
                 #os.remove('/Users/toshinari/Downloads/SVM_file/INPUT/{}/{}'.format(choice_dir, k))

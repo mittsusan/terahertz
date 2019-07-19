@@ -28,7 +28,7 @@ j = 0
 
 from sklearn.model_selection import train_test_split
 
-sample_list = ['lac']
+sample_list = ['glu']
 path_1 = os.chdir('/Users/toshinari/Downloads/SVM_file/ALL_RESULT/ALL_file/Trans')
 
 y_all, X_all,file_list = Label_Sample_File(sample_list,first,last)
@@ -41,13 +41,13 @@ print('\nPCA')
 A, B = pCA(X_all.T, y_all)
 print('\nICA')
 C,D = iCA(X_all.T,y_all)
-clf = LocalOutlierFactor(n_neighbors=7, contamination=0.01)
+clf = LocalOutlierFactor(n_neighbors=7, contamination=0.05)
 pred = clf.fit_predict(X_all.T)
 
 # 正常データのプロット
-#plt.scatter(A[:, 0][np.where(pred > 0)], A[:, 1][np.where(pred > 0)])
+plt.scatter(A[:, 0][np.where(pred > 0)], A[:, 1][np.where(pred > 0)])
 # 異常データのプロット
-#plt.scatter(A[:, 0][np.where(pred < 0)], A[:, 1][np.where(pred < 0)])
+plt.scatter(A[:, 0][np.where(pred < 0)], A[:, 1][np.where(pred < 0)])
 
 #以下エラーファイルの表示
 k = [idx for idx,val in enumerate(pred) if val<=0]
