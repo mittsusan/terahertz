@@ -4,7 +4,6 @@ from sklearn.metrics import accuracy_score
 from sklearn import neighbors
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
-import numpy as np
 from sklearn import metrics
 from sklearn.decomposition import FastICA
 from sklearn.model_selection import GridSearchCV
@@ -13,6 +12,17 @@ import scipy.stats as stats
 from sklearn.ensemble import RandomForestClassifier
 import numpy as np
 import pandas as pd
+from sklearn.naive_bayes import GaussianNB # ガウシアン
+
+def gaussiannb(train_x, train_y, test_x, test_y):
+    gnb = GaussianNB()
+    clf = gnb.fit(train_x, train_y)
+    y_pred = clf.predict(test_x)
+    score = accuracy_score(y_pred, test_y)
+    print('score: {}'.format(score))
+
+    return y_pred
+
 
 def randomforest(train_x, train_y, test_x, test_y, from_frequency, to_frequency, frequency_list):
     # use a full grid over all parameters
@@ -31,7 +41,10 @@ def randomforest(train_x, train_y, test_x, test_y, from_frequency, to_frequency,
     feature_importances = forest_grid_best.feature_importances_
     plt.figure(figsize=(10, 5))
     y = feature_importances
-    x = np.arange(from_frequency,to_frequency+0.01,0.01)
+    if not frequency_list:
+        x = np.arange(from_frequency,to_frequency+0.01,0.01)
+    else:
+        x = frequency_list
     plt.bar(x, y, width = 0.005, align="center")
     plt.xlabel('frequency[THz]')
     plt.ylabel('feature importance')
