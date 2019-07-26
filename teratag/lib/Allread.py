@@ -259,17 +259,19 @@ class allread:
         return
 
     def graph_Frequency_trans_reflect_is_TPG(self):
-        plt.style.use('ggplot')
+        #plt.style.use('ggplot')
         df = self.df
-        df.columns = [self.method]
+        df.columns = [self.sample]
         #散布図
-        #fig, axes = plt.subplots(2, 2, figsize=(14, 10), sharey=True)
-        df.plot()
-        plt.xlabel('周波数[THz]')
-        plt.ylabel(self.method)
+        df.plot(legend=None)
+        #plt.grid()
+        plt.xlabel('frequency[THz]',fontsize = 18)
+        plt.ylabel(self.method,fontsize = 18)
         plt.title('type:'+str(self.type)+'sample:' + str(self.sample))
+        plt.tick_params(labelsize=18)
+
         plt.show()
-        plt.close()
+
         return
 
     def graph_Frequency_trans_reflect_is_TPG_everymm(self,x,y):
@@ -283,13 +285,19 @@ class allread:
             df = self.df
             sample_init = 1
         elif self.sample == 1:
-            plt.style.use('ggplot')
             #print('plot')
             df.plot(colormap='tab20')
-            plt.xlabel(x)
-            plt.ylabel(y)
+            plt.xlabel(x,fontsize = 18)
+            plt.ylabel(y,fontsize = 18)
             plt.title(self.type-1)
+            plt.tick_params(labelsize=18)
+            plt.legend(fontsize=10)
+            if not self.frequency_list:
+                pass
+            else:
+                plt.xticks(self.frequency_list)
             plt.show()
+            plt.close()
             self.df.columns = [self.sample]
             df = self.df
 
@@ -299,11 +307,17 @@ class allread:
         if self.last_type == self.type and self.last_num == self.sample:
             print('lastplot')
             df.plot(colormap='tab20')
-            plt.xlabel(x)
-            plt.ylabel(y)
-
+            plt.xlabel(x,fontsize = 18)
+            plt.ylabel(y,fontsize = 18)
+            plt.tick_params(labelsize=18)
+            plt.legend(fontsize=10)
             plt.title(self.type)
+            if not self.frequency_list:
+                pass
+            else:
+                plt.xticks(self.frequency_list)
             plt.show()
+            plt.close()
             #print(df)
 
         return
