@@ -8,18 +8,18 @@ from lib import svm,kNN,pCA,svm_gridsearchcv,randomforest,gaussiannb
 from lib import colorcode
 #######測定物の度に変更して下さい
 date_dir = '/Users/ryoya/kawaseken'
-shielding_material = '/cardboard2_denim2'
+shielding_material = '/syntheticleather_leather'
 sensitivity = 'nosensitivity'
-from_frequency = 1.0
-to_frequency = 1.8
+from_frequency = 0.8
+to_frequency = 1.6
 frequency_list = [] #周波数を指定しない場合は空にして下さい。
 inten_or_trans_or_reflect = 0 #0の時強度、1の時透過率、2の時反射率
 #mainデータを読み込む。
 last_type = 6 #使用する種類
-last_num = 10 #最後の種類の使用するファイル数
+last_num = 6 #最後の種類の使用するファイル数
 #カラーコードのタグの数width=4,length=4の場合16個のタグに対応
 width = 3
-length = 7
+length = 6
 test_number = 3
 pca_third_argument = 1 #PCAの第3引数で0の場合厚み、それ以外は糖類になるように設定。
 #######
@@ -73,9 +73,11 @@ print('\nGaussianNB')
 best_pred=gaussiannb(train_x,train_y,test_x,test_y)
 colorcode(best_pred,width,length)
 #RF
+'''
 print('\nRF')
 best_pred=randomforest(train_x,train_y,test_x,test_y,from_frequency,to_frequency,frequency_list)
 colorcode(best_pred,width,length)
+'''
 #SVM
 print('\nSVM')
 best_pred=svm(train_x,train_y,test_x,test_y)
