@@ -69,9 +69,11 @@ print(type(train_y))
 colorcode(test_y,width,length)
 
 #gaussianNB
+'''
 print('\nGaussianNB')
 best_pred=gaussiannb(train_x,train_y,test_x,test_y)
 colorcode(best_pred,width,length)
+'''
 #RF
 '''
 print('\nRF')

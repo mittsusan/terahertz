@@ -201,10 +201,11 @@ def pCA(x_all, y_all,number,file_name_list):
         for label in np.unique(targets): #厚さのみのPCA
             plt.scatter(transformed[targets == label, 0],
                         transformed[targets == label, 1], label='{}mm'.format(label*0.5))
-        plt.xlabel('pc1',fontsize=18)
-        plt.ylabel('pc2',fontsize=18)
-        plt.legend(loc= 'best',fontsize=16)
-        plt.tick_params(labelsize=18)
+        plt.xlabel('pc1',fontsize=28)
+        plt.ylabel('pc2',fontsize=28)
+        #plt.legend(loc= 'best',fontsize=16)
+        plt.yticks([-1.0,-0.5,0.0,0.5,1.0])
+        plt.tick_params(labelsize=24)
         #plt.legend(bbox_to_anchor=(1, 0), loc='lower right', borderaxespad=1)
         plt.show()
 
@@ -222,10 +223,11 @@ def pCA(x_all, y_all,number,file_name_list):
             elif item == 4:
                 plt.scatter(transformed[index, 0],
                             transformed[index, 1], marker="${}$".format(file_name), c ='red')
-        plt.xlabel('pc1',fontsize=18)
-        plt.ylabel('pc2',fontsize=18)
-        plt.legend(loc='best',fontsize=16)
-        plt.tick_params(labelsize=18)
+        plt.xlabel('pc1',fontsize=28)
+        plt.ylabel('pc2',fontsize=28)
+        #plt.legend(loc='best',fontsize=16)
+        plt.yticks([-1.0, -0.5, 0.0, 0.5, 1.0])
+        plt.tick_params(labelsize=24)
         plt.show()
 
     else: #糖類の場合
@@ -251,10 +253,12 @@ def pCA(x_all, y_all,number,file_name_list):
             elif label == 7:
                 plt.scatter(transformed[targets == label, 0],
                             transformed[targets == label, 1], label='Glu_Lac_Mal')
-        plt.xlabel('pc1', fontsize=18)
-        plt.ylabel('pc2', fontsize=18)
-        plt.legend(loc='best',fontsize=16)
-        plt.tick_params(labelsize=18)
+        plt.xlabel('pc1', fontsize=28)
+        plt.ylabel('pc2', fontsize=28)
+        plt.xticks([-2, -1, -0, 0, 1, 2])
+        plt.yticks([-0.75, -0.5, -0.25, 0.00, 0.25, 0.5, 0.75])
+        #plt.legend(loc='best',fontsize=16)
+        plt.tick_params(labelsize=24)
         plt.show()
 
         for index, (item, file_name) in enumerate(zip(targets, file_name_list)):  # ファイル名も表記する。
@@ -277,10 +281,12 @@ def pCA(x_all, y_all,number,file_name_list):
             elif item == 6:
                 plt.scatter(transformed[index, 0],
                             transformed[index, 1], marker="${}$".format(file_name), c='brown')
-        plt.xlabel('pc1', fontsize=18)
-        plt.ylabel('pc2', fontsize=18)
-        plt.legend(loc='best', fontsize=16)
-        plt.tick_params(labelsize=18)
+        plt.xlabel('pc1', fontsize=28)
+        plt.ylabel('pc2', fontsize=28)
+        plt.xticks([-2, -1, -0, 0, 1, 2])
+        plt.yticks([-0.75, -0.5, -0.25, 0.00, 0.25, 0.5, 0.75])
+        #plt.legend(loc='best', fontsize=16)
+        plt.tick_params(labelsize=24)
         plt.show()
 
     return transformed, targets
