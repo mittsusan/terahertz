@@ -7,6 +7,7 @@ import matplotlib.ticker as tick
 from matplotlib import rcParams
 from sklearn import preprocessing
 import sys
+from scipy import interpolate
 sys.path.append('../')
 from lib.change_db import change_db
 
@@ -21,11 +22,11 @@ class allread:
         #self.df = pd.read_table(file, engine='python')
         #self.file = file
         if method == 0:
-            y_axis = 'intensity[a.u.]'
+            y_axis = 'Intensity (a.u.)'
         elif method == 1:
-            y_axis = 'transmittance'
+            y_axis = 'Transmittance'
         elif method == 2:
-            y_axis = 'reflectance'
+            y_axis = 'Reflectance'
         self.method = y_axis
         self.thickness = thickness
         self.type = type
@@ -135,7 +136,34 @@ class allread:
 
         return x_all, df_ref
 
+    # interpld
+    def spline1(self, point):
+        y = list(self.df.iloc[:, 0])
+        x = list(self.df.index)
+        f = interpolate.interp1d(x, y, kind="cubic")  # kindの値は一次ならslinear、二次ならquadraticといった感じに
+        X = np.linspace(x[0], x[-1], num=point, endpoint=True)
+        Y = f(X)
+        self.df = pd.DataFrame(Y, index=X)
 
+
+    # Akima1DInterpolator
+    def spline2(self,  point):
+        y = list(self.df.iloc[:, 0])
+        x = list(self.df.index)
+        f = interpolate.Akima1DInterpolator(x, y)
+        X = np.linspace(x[0], x[-1], num=point, endpoint=True)
+        Y = f(X)
+        self.df = pd.DataFrame(Y, index=X)
+
+
+    # splprep
+    def spline3(self,  point, deg):
+        y = list(self.df.iloc[:, 0])
+        x = list(self.df.index)
+        tck, u = interpolate.splprep([x, y], k=deg, s=0)
+        u = np.linspace(0, 1, num=point, endpoint=True)
+        spline = interpolate.splev(u, tck)
+        self.df = pd.DataFrame(spline[1], index=spline[0])
 
 
     def Frequency_trans_reflect_is_TPG(self,file,ref):
@@ -149,9 +177,9 @@ class allread:
         #print(df_ref)
 
         #ここで強度を透過率に変化
-        if self.method == 'intensity[a.u.]':
+        if self.method == 'Intensity (a.u.)':
             pass
-        elif self.method == 'transmittance' or self.method == 'reflectance':
+        elif self.method == 'Transmittance' or self.method == 'Reflectance':
             self.df.iloc[:, 0] = self.df.iloc[:, 0] / df_ref.iloc[:, 0]
 
 
@@ -167,8 +195,9 @@ class allread:
         #self.df = change_db(self.df)
         #self.graph_Frequency_trans_reflect_is_TPG()
 
+        self.spline2(800)#補間曲線を作成
 
-        self.graph_Frequency_trans_reflect_is_TPG_everymm('frequency[THz]',self.method)
+        self.graph_Frequency_trans_reflect_is_TPG_everymm('Frequency (THz)',self.method)
 
         #print(self.df)
         for j in self.df.iloc[:,0]:
@@ -286,12 +315,13 @@ class allread:
             sample_init = 1
         elif self.sample == 1:
             #print('plot')
-            df.plot(colormap='tab20')
-            plt.xlabel(x,fontsize = 18)
-            plt.ylabel(y,fontsize = 18)
+            df.plot(colormap='tab20',legend=None)
+            plt.xlabel(x,fontsize = 28)
+            plt.ylabel(y,fontsize = 28)
+            plt.xticks([0.8,1.0,1.2,1.4,1.6])
             plt.title(self.type-1)
-            plt.tick_params(labelsize=18)
-            plt.legend(fontsize=10)
+            plt.tick_params(labelsize=24)
+            #plt.legend(fontsize=10)
             if not self.frequency_list:
                 pass
             else:
@@ -306,11 +336,12 @@ class allread:
             df = df.append(self.df)
         if self.last_type == self.type and self.last_num == self.sample:
             print('lastplot')
-            df.plot(colormap='tab20')
-            plt.xlabel(x,fontsize = 18)
-            plt.ylabel(y,fontsize = 18)
-            plt.tick_params(labelsize=18)
-            plt.legend(fontsize=10)
+            df.plot(colormap='tab20',legend=None)
+            plt.xlabel(x,fontsize = 28)
+            plt.ylabel(y,fontsize = 28)
+            plt.xticks([0.8, 1.0, 1.2, 1.4, 1.6])
+            plt.tick_params(labelsize=24)
+            #plt.legend(fontsize=10)
             plt.title(self.type)
             if not self.frequency_list:
                 pass
