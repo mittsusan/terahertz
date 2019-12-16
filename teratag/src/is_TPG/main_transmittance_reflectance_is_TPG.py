@@ -6,6 +6,7 @@ from lib import train_test_split,decide_test_number
 #from sklearn.model_selection import train_test_split
 from lib import svm,kNN,pCA,svm_gridsearchcv,randomforest,gaussiannb
 from lib import colorcode
+from lib import ridge,svr_linear,svr_rbf
 #######測定物の度に変更して下さい
 date_dir = '/Users/kawaselab/PycharmProjects/20191201'
 shielding_material = '/syntheticleather_leather'
@@ -68,41 +69,52 @@ print(type(train_y))
 
 colorcode(test_y,width,length)
 
-#gaussianNB
-'''
-print('\nGaussianNB')
-best_pred=gaussiannb(train_x,train_y,test_x,test_y)
-colorcode(best_pred,width,length)
-'''
+# #gaussianNB
+# print('\nGaussianNB')
+# best_pred=gaussiannb(train_x,train_y,test_x,test_y)
+# colorcode(best_pred,width,length)
+#
+# #RF
+# print('\nRF')
+# best_pred=randomforest(train_x,train_y,test_x,test_y,from_frequency,to_frequency,frequency_list)
+# colorcode(best_pred,width,length)
 
-#RF
-'''
-print('\nRF')
-best_pred=randomforest(train_x,train_y,test_x,test_y,from_frequency,to_frequency,frequency_list)
-colorcode(best_pred,width,length)
-'''
-
-#SVM
-print('\nSVM')
-best_pred=svm(train_x,train_y,test_x,test_y)
+#Ridge回帰
+print('\nRidge回帰')
+best_pred=ridge(train_x,train_y,test_x,test_y)
 colorcode(best_pred,width,length)
 
-#SVM_grid_searchCV
-'''
-print('\nSVM_gridsearch_CV')
-best_pred=svm_gridsearchcv(train_x,train_y,test_x,test_y)
+#SVR線形回帰
+print('\nSVR線形回帰')
+best_pred=svr_linear(train_x,train_y,test_x,test_y)
 colorcode(best_pred,width,length)
-'''
-#k近傍法
-print('\nK近傍法')
-best_pred=kNN(train_x,train_y,test_x,test_y)
+
+#SVRガウシアン回帰
+print('\nSVRガウシアン回帰')
+best_pred=svr_rbf(train_x,train_y,test_x,test_y)
 colorcode(best_pred,width,length)
-# PCA-SVM
-print('\nPCA-SVM')
 
-transformed, targets = pCA(x_all, y_all, pca_third_argument,file_name_list)
+# #SVM
+# print('\nSVM')
+# best_pred=svm(train_x,train_y,test_x,test_y)
+# colorcode(best_pred,width,length)
 
-train_x_pca,train_y_pca,test_x_pca,test_y_pca = decide_test_number(transformed,targets,test_number)
-
-best_pred = svm(train_x_pca, train_y_pca, test_x_pca, test_y_pca)
-colorcode(best_pred, width, length)
+# #SVM_grid_searchCV
+#
+# print('\nSVM_gridsearch_CV')
+# best_pred=svm_gridsearchcv(train_x,train_y,test_x,test_y)
+# colorcode(best_pred,width,length)
+#
+# #k近傍法
+# print('\nK近傍法')
+# best_pred=kNN(train_x,train_y,test_x,test_y)
+# colorcode(best_pred,width,length)
+# # PCA-SVM
+# print('\nPCA-SVM')
+#
+# transformed, targets = pCA(x_all, y_all, pca_third_argument,file_name_list)
+#
+# train_x_pca,train_y_pca,test_x_pca,test_y_pca = decide_test_number(transformed,targets,test_number)
+#
+# best_pred = svm(train_x_pca, train_y_pca, test_x_pca, test_y_pca)
+# colorcode(best_pred, width, length)
