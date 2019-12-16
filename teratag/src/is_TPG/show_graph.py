@@ -1,5 +1,7 @@
 import pandas as pd
 import os
+import sys
+sys.path.append('../../')
 from lib import ChangeTransmittance
 from lib import ReadFile
 import matplotlib.pyplot as plt
@@ -7,30 +9,16 @@ import numpy as np
 import glob
 
 def main():
-    dir_path = '/Users/ryoya/kawaseken/20191016/tag/number2048_average20'
+    #ディレクトリ '/dir_path/sensivity/folder_num/file_num.txt' '/dir_path/ref_file'
+    dir_path = '/Users/kawaselab/PycharmProjects/20191201/syntheticleather_leather'
+    sensivity = 50
     ref_file = 'ref.txt'
-    ref = os.path.join(dir_path,ref_file) #絶対パスにする
-    #measurement_file = ['-5db.txt', '-15db.txt', '-25db.txt', 'ems.txt', 'cardboard.txt', 'denim.txt', 'synthetic_leather.txt','leather.txt']
-    #measurement_file = ['ems.txt','-5db.txt']
-    #measurement_file = ['cardboard.txt','-15db.txt']
-    #measurement_file = ['synthetic_leather.txt','-20db.txt']
-    #measurement_file =['leather.txt','-50db.txt']
-    #measurement_file = ['denim.txt', '-15db.txt']
-    #measurement_file = ['1.txt']
-    #measurement_file = [f for f in glob.glob(dir_path + 'hakupress2_*.txt')]
-    #measurement_file = ['EMS.txt','synthetic.txt','Natural leather.txt']
-    #measurement_file = ['PE_porous_1.txt']
-    #measurement_file = ['ref_final2.txt']
-    #measurement_file = ['ref_final2.txt','PE_porous_1.txt','PE_porous_6.txt']
-    #print(measurement_file)
-    #measurement_file = ['ref2.txt', 'blank_4.txt', 'blank_6.txt','1_4.txt','1_6.txt','2_4.txt','2_6.txt']
-    measurement_file = ['100%.txt', '1.94mm.txt', '1.88mm.txt']
-    #measurement_file = ['100%.txt', '1_4.txt', '1_6.txt']
-    #measurement_file = ['100%.txt', '2_4.txt', '2_6.txt']
-    measurement = [os.path.join(dir_path, file) for file in measurement_file]  # 絶対パスにする
-    #print(measurement)
+    folder_num = 15 #使用する種類の数
+    file_num = 5 #使用するファイル数
 
-    def transmittance(ref,measurement):
+    ref = os.path.join(dir_path,ref_file) #絶対パスにする
+
+    def transmittance(ref,measurement,i):
         df = ChangeTransmittance(ref).change_transmittance_list(measurement)
         x_axis = 'frequency[THz]'
         y_axis = 'transmittance'
@@ -43,11 +31,12 @@ def main():
         plt.tick_params(labelsize=14)
         #plt.xticks(np.arange(1.2, 1.6, 0.04))
         #plt.legend(bbox_to_anchor=(1.01,1), loc=2, borderaxespad=0,fontsize=10)
+        plt.title('{}'.format(i))
         plt.show()
         plt.close()
         return
 
-    def intensity(measurement):
+    def intensity(measurement,i):
         df = ReadFile().read_file_list(measurement)
         x_axis = 'frequency[THz]'
         y_axis = 'intensity[mV]'
@@ -70,11 +59,11 @@ def main():
 
         plt.tick_params(labelsize=18)
         plt.legend(fontsize=12)
-
+        plt.title('{}'.format(i))
         plt.show()
         plt.close()
         return
-    def tds_transmittance(ref,measurement):
+    def tds_transmittance(ref,measurement,i):
         df = ChangeTransmittance(ref).tds_change_transmittance_list(measurement)
         x_axis = 'frequency[THz]'
         y_axis = 'transmittance'
@@ -88,12 +77,27 @@ def main():
         plt.tick_params(labelsize=14)
         #plt.xticks(np.arange(1.2, 1.6, 0.04))
         #plt.legend(fontsize=12)
+        plt.title('{}'.format(i))
         plt.show()
         plt.close()
         return
-    #transmittance(ref,measurement)
-    #intensity(measurement)
-    tds_transmittance(ref,measurement)
+
+    for i in range (1,folder_num + 1):
+        measurement_file = ['ref2.txt']
+        for j in range (1,file_num + 1):
+                file_name = '{0}/{1}/{2}.txt'.format(sensivity,i,j)
+                measurement_file.append(file_name)
+
+        measurement = [os.path.join(dir_path, file) for file in measurement_file]  # 絶対パスにする
+
+        #transmittance(ref, measurement,i)
+        intensity(measurement,i)
+        # tds_transmittance(ref,measurement,i)
+
+        if j == file_num:
+            measurement_file.clear()
+
+
     return
 
 if __name__ == '__main__':

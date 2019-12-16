@@ -203,17 +203,17 @@ def pCA(x_all, y_all,number,file_name_list):
                         transformed[targets == label, 1], label='{}mm'.format(label*0.5))
         plt.xlabel('pc1',fontsize=28)
         plt.ylabel('pc2',fontsize=28)
-        #plt.legend(loc= 'best',fontsize=16)
-        plt.yticks([-1.0,-0.5,0.0,0.5,1.0])
+        plt.legend(loc= 'best',fontsize=16)
+        #plt.yticks([-1.0,-0.5,0.0,0.5,1.0])
         plt.tick_params(labelsize=24)
-        #plt.legend(bbox_to_anchor=(1, 0), loc='lower right', borderaxespad=1)
+        plt.legend(bbox_to_anchor=(1, 0), loc='lower right', borderaxespad=1)
         plt.show()
 
         for index, (item, file_name) in enumerate(zip(targets, file_name_list)): #ファイル名も表記する。
             if item == 1:
                 plt.scatter(transformed[index, 0],
                             transformed[index, 1], marker="${}$".format(file_name), c ='blue')
-            if item == 2:
+            elif item == 2:
                 plt.scatter(transformed[index, 0],
                             transformed[index, 1], marker="${}$".format(file_name), c ='orange')
 
@@ -223,10 +223,11 @@ def pCA(x_all, y_all,number,file_name_list):
             elif item == 4:
                 plt.scatter(transformed[index, 0],
                             transformed[index, 1], marker="${}$".format(file_name), c ='red')
+
         plt.xlabel('pc1',fontsize=28)
         plt.ylabel('pc2',fontsize=28)
-        #plt.legend(loc='best',fontsize=16)
-        plt.yticks([-1.0, -0.5, 0.0, 0.5, 1.0])
+        plt.legend(loc='best',fontsize=16)
+        #plt.yticks([-1.0, -0.5, 0.0, 0.5, 1.0])
         plt.tick_params(labelsize=24)
         plt.show()
 
@@ -234,47 +235,72 @@ def pCA(x_all, y_all,number,file_name_list):
         for label in np.unique(targets):
             if label == 1:
                 plt.scatter(transformed[targets == label, 0],
-                            transformed[targets == label, 1], label='A')
+                            transformed[targets == label, 1], label='Al(OH)3_100,Lac_0', c = '#%02X%02X%02X' % (255,0,0))
             elif label == 2:
                 plt.scatter(transformed[targets == label, 0],
-                            transformed[targets == label, 1], label='B')
+                            transformed[targets == label, 1], label='Lac_100,Mal_0', c = '#%02X%02X%02X' % (0,255,0))
             elif label == 3:
                 plt.scatter(transformed[targets == label, 0],
-                            transformed[targets == label, 1], label='C')
+                            transformed[targets == label, 1], label='Mal_100,Al(OH)3_0', c = '#%02X%02X%02X' % (0,0,255))
             elif label == 4:
                 plt.scatter(transformed[targets == label, 0],
-                            transformed[targets == label, 1], label='A & B')
+                            transformed[targets == label, 1], label='Al(OH)3_80,Lac_20', c = '#%02X%02X%02X' % (int(255*0.8),int(255*0.2),0))
             elif label == 5:
                 plt.scatter(transformed[targets == label, 0],
-                            transformed[targets == label, 1], label='B & C')
+                            transformed[targets == label, 1], label='Lac_80,Mal_20', c = '#%02X%02X%02X' % (0,int(255*0.8),int(255*0.8)))
             elif label == 6:
                 plt.scatter(transformed[targets == label, 0],
-                            transformed[targets == label, 1], label='C & A')
+                            transformed[targets == label, 1], label='Mal_80,Al(OH)3_20', c = '#%02X%02X%02X' % (int(255*0.2),0,int(255*0.8)))
             elif label == 7:
                 plt.scatter(transformed[targets == label, 0],
-                            transformed[targets == label, 1], label='Glu_Lac_Mal')
+                            transformed[targets == label, 1], label='Al(OH)3_60,Lac_40', c = '#%02X%02X%02X' % (int(255*0.6),int(255*0.4),0))
+            elif label == 8:
+                plt.scatter(transformed[targets == label, 0],
+                            transformed[targets == label, 1], label='Lac_60,Mal_40', c = '#%02X%02X%02X' % (0,int(255*0.6),int(255*0.4)))
+            elif label == 9:
+                plt.scatter(transformed[targets == label, 0],
+                            transformed[targets == label, 1], label='Mal_60,Al(OH)3_40', c = '#%02X%02X%02X' % (int(255*0.4),0,int(255*0.6)))
+            elif label == 10:
+                plt.scatter(transformed[targets == label, 0],
+                            transformed[targets == label, 1], label='Al(OH)3_40,Lac_60', c = '#%02X%02X%02X' % (int(255*0.4),int(255*0.6),0))
+            elif label == 11:
+                plt.scatter(transformed[targets == label, 0],
+                            transformed[targets == label, 1], label='Lac_40,Mal_60', c = '#%02X%02X%02X' % (0,int(255*0.4),int(255*0.6)))
+            elif label == 12:
+                plt.scatter(transformed[targets == label, 0],
+                            transformed[targets == label, 1], label='Mal_40,Al(OH)3_60', c = '#%02X%02X%02X' % (int(255*0.6),0,int(255*0.4)))
+            elif label == 13:
+                plt.scatter(transformed[targets == label, 0],
+                            transformed[targets == label, 1], label='Al(OH)3_20,Lac_80', c = '#%02X%02X%02X' % (int(255*0.2),int(255*0.8),0))
+            elif label == 14:
+                plt.scatter(transformed[targets == label, 0],
+                            transformed[targets == label, 1], label='Lac_20,Mal_80', c = '#%02X%02X%02X' % (0,int(255*0.2),int(255*0.8)))
+            elif label == 15:
+                plt.scatter(transformed[targets == label, 0],
+                            transformed[targets == label, 1], label='Mal_20,Al(OH)3_80', c = '#%02X%02X%02X' % (int(255*0.8),0,int(255*0.2)))
         plt.xlabel('pc1', fontsize=28)
         plt.ylabel('pc2', fontsize=28)
-        plt.xticks([-2, -1, -0, 0, 1, 2])
-        plt.yticks([-0.75, -0.5, -0.25, 0.00, 0.25, 0.5, 0.75])
-        #plt.legend(loc='best',fontsize=16)
+        #plt.xticks([-2, -1, -0, 0, 1, 2])
+        #plt.yticks([-0.75, -0.5, -0.25, 0.00, 0.25, 0.5, 0.75])
+        #plt.subplots_adjust(left=0.1, right=0.4, bottom=0.2, top=0.95)
+        #plt.legend(loc='best', borderaxespad=0,bbox_to_anchor=(1.05, 1),fontsize=10,ncol=1)
         plt.tick_params(labelsize=24)
         plt.show()
 
         for index, (item, file_name) in enumerate(zip(targets, file_name_list)):  # ファイル名も表記する。
             if item == 1:
                 plt.scatter(transformed[index, 0],
-                            transformed[index, 1], marker="${}$".format(file_name), c='blue')
-            if item == 2:
+                            transformed[index, 1], marker="${}$".format(file_name), c= "#ff0000")
+            elif item == 2:
                 plt.scatter(transformed[index, 0],
-                            transformed[index, 1], marker="${}$".format(file_name), c='orange')
+                            transformed[index, 1], marker="${}$".format(file_name), c="g")
 
             elif item == 3:
                 plt.scatter(transformed[index, 0],
-                            transformed[index, 1], marker="${}$".format(file_name), c='green')
+                            transformed[index, 1], marker="${}$".format(file_name), c="b")
             elif item == 4:
                 plt.scatter(transformed[index, 0],
-                            transformed[index, 1], marker="${}$".format(file_name), c='red')
+                            transformed[index, 1], marker="${}$".format(file_name), c="y")
             elif item == 5:
                 plt.scatter(transformed[index, 0],
                             transformed[index, 1], marker="${}$".format(file_name), c='purple')
@@ -283,9 +309,9 @@ def pCA(x_all, y_all,number,file_name_list):
                             transformed[index, 1], marker="${}$".format(file_name), c='brown')
         plt.xlabel('pc1', fontsize=28)
         plt.ylabel('pc2', fontsize=28)
-        plt.xticks([-2, -1, -0, 0, 1, 2])
-        plt.yticks([-0.75, -0.5, -0.25, 0.00, 0.25, 0.5, 0.75])
-        #plt.legend(loc='best', fontsize=16)
+        #plt.xticks([-2, -1, -0, 0, 1, 2])
+        #plt.yticks([-0.75, -0.5, -0.25, 0.00, 0.25, 0.5, 0.75])
+        plt.legend(loc='best', fontsize=16)
         plt.tick_params(labelsize=24)
         plt.show()
 
