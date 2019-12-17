@@ -82,17 +82,17 @@ colorcode(test_y,width,length)
 #Ridge回帰
 print('\nRidge回帰')
 best_pred=ridge(train_x,train_y,test_x,test_y)
-colorcode(best_pred,width,length)
+#colorcode(best_pred,width,length)
 
 #SVR線形回帰
 print('\nSVR線形回帰')
 best_pred=svr_linear(train_x,train_y,test_x,test_y)
-colorcode(best_pred,width,length)
+#colorcode(best_pred,width,length)
 
 #SVRガウシアン回帰
 print('\nSVRガウシアン回帰')
 best_pred=svr_rbf(train_x,train_y,test_x,test_y)
-colorcode(best_pred,width,length)
+#colorcode(best_pred,width,length)
 
 # #SVM
 # print('\nSVM')

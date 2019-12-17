@@ -9,7 +9,7 @@ from lib import colorcode
 from lib import ridge_multi,svr_linear_multi,svr_rbf_multi
 #######測定物の度に変更して下さい
 date_dir = '/Users/kawaselab/PycharmProjects/20191201'
-shielding_material = '/syntheticleather_leather'
+shielding_material = '/syntheticleather_leather_regression'
 sensitivity = '50'
 dir = date_dir + shielding_material + '/' + sensitivity
 from_frequency = 0.9
@@ -39,9 +39,12 @@ for i in range(1,last_type+1):
                 x = allread(inten_or_trans_or_reflect,str(i)+thickness,i*concentration,j,last_type,last_num,from_frequency,to_frequency,frequency_list).Frequency_trans_reflect_is_TPG(date_dir
                     + shielding_material + '/' + sensitivity + '/' + str(i) + '/' + str(concentration) + '/'+ str(j) + '.txt',
                         date_dir + shielding_material + '/ref.txt')
-
-                y[i-1] == 100 - 20*(concentration - 1)
-                y[i] == 0 + 20*(concentration - 1)
+                if i == last_type:
+                    y[i-1] = 100 - 20*(concentration - 1)
+                    y[0] =  0 + 20*(concentration - 1)
+                else:
+                    y[i-1] == 100 - 20*(concentration - 1)
+                    y[i] == 0 + 20*(concentration - 1)
                 file_name_list.append(j)
 
                 if flag == 0:
@@ -64,8 +67,8 @@ train_x,train_y,test_x,test_y = decide_test_number_multi_regressor(x_all,y_all,t
 
 print(type(train_x))
 print(type(train_y))
-#print(test_x)
-#print(test_y)
+print(test_x)
+print(test_y)
 #print(x_all)
 #print(y_all)
 #referenceのカラーコード
