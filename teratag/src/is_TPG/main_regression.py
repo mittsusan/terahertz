@@ -29,9 +29,9 @@ file_name_list = [] #filenameの保持
 thickness = 'mm'
 flag = 0
 
-nb_epoch = 1000
+nb_epoch = 7000
 nb_batch = 32
-learning_rate = 1e-2
+learning_rate = 1e-1
 dense1 = 60
 dense2 = 30
 dense3 = 14
@@ -106,17 +106,15 @@ train_x,train_y,test_x,test_y = decide_test_number_multi_regressor(x_all,y_all,t
 # best_pred=svr_rbf_multi(train_x,train_y,test_x,test_y)
 # #colorcode(best_pred,width,length)
 
-#ランダムフォレスト回帰
+
 print('\nランダムフォレスト回帰')
 best_pred=randomforest_regression(train_x,train_y,test_x,test_y,from_frequency,to_frequency,frequency_list)
 #colorcode(best_pred,width,length)
 
-#ニューラルネットワーク回帰
-print('\nニューラルネット回帰')
-best_pred=dnn(train_x,train_y,test_x,test_y)
-#colorcode(best_pred,width,length)
+# print('\nニューラルネット回帰')
+# best_pred=dnn(train_x,train_y,test_x,test_y)
+# #colorcode(best_pred,width,length)
 
-#ニューラルネットワーク回帰
 print('\nニューラルネット回帰(Kerasで最適化)')
 best_pred=keras_dnn(train_x,train_y,test_x,test_y,from_frequency,to_frequency,frequency_list,last_type,shielding_material,
                     nb_epoch, nb_batch, learning_rate,dense1, dense2, dense3, dense4, regularizers_l2_1, regularizers_l2_2, regularizers_l2_3)

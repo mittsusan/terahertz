@@ -14,10 +14,13 @@ from sklearn.metrics import accuracy_score
 import datetime
 import tensorflow as tf
 import keras
-from keras.layers import Dense,Activation,Dropout,Flatten
+from keras.layers import Dense,Activation,Dropout,Flatten,LeakyReLU,PReLU
 from keras.layers.convolutional import Conv1D, UpSampling1D
 import keras.backend.tensorflow_backend as KTF
+from keras.wrappers.scikit_learn import KerasRegressor
 from keras import regularizers
+from sklearn.metrics import r2_score,mean_absolute_error
+
 
 '''
 # データの読み込み
@@ -217,7 +220,8 @@ def randomforest_regression(train_x, train_y, test_x, test_y, from_frequency, to
     forest_grid = RandomForestRegressor(n_estimators=120,random_state=0,bootstrap=True)
     forest_grid.fit(train_x, train_y)  # fit
     best_pred = forest_grid.predict(test_x)
-    print("テストデータの精度 =", forest_grid.score(test_x, test_y))
+    print("決定係数:", forest_grid.score(test_x, test_y))
+    print('Mean absolute error 誤差率:',mean_absolute_error(test_y,best_pred))
     # 特徴量の重要度
     feature_importances = forest_grid.feature_importances_
     plt.figure(figsize=(10, 5))
@@ -236,9 +240,10 @@ def randomforest_regression(train_x, train_y, test_x, test_y, from_frequency, to
     return best_pred
 
 def dnn(train_x, train_y, test_x, test_y):
-    model = MLPRegressor(hidden_layer_sizes=(100,100,100,100,),random_state=0)
+    model = MLPRegressor(hidden_layer_sizes=(100,100,100,100,),random_state=0,max_iter=5000)
     model.fit(train_x, train_y)
     print("テストデータの精度 =", model.score(test_x, test_y))
+
 
 
 def keras_dnn(train_x, train_y, test_x, test_y,from_frequency, to_frequency, frequency_list, class_number,
@@ -252,8 +257,8 @@ def keras_dnn(train_x, train_y, test_x, test_y,from_frequency, to_frequency, fre
     except:
         pass
 
-    print(train_x.shape)
-    print(train_y)
+    # print(train_x.shape)
+    # print(train_y)
 
     try:
         model_structure = 'conv{0}relu_{1}relul2{2}_{3}relul2{4}_{5}relul2{6}_{7}softmax'.format(conv1, dense1,
@@ -267,12 +272,12 @@ def keras_dnn(train_x, train_y, test_x, test_y,from_frequency, to_frequency, fre
         model_structure = '{0}relul2{1}_{2}relul2{3}_{4}relul2{5}_{6}softmax'.format(dense1, regularizers_l2_1, dense2,
                                                                                      regularizers_l2_2, dense3,
                                                                                      regularizers_l2_3, dense4)
-    f_log = '/content/gdrive/My Drive/kawaseken/teratag/logs/fit' + shielding_material + 'freq' + str(
+    f_log = 'User/ryoya/kawaseken/teratag/logs/fit' + shielding_material + 'freq' + str(
         from_frequency) + 'to' + str(to_frequency) + 'num' + str(
         len(frequency_list)) + '/' + model_structure + '_lr' + str(learning_rate) + '/Adam_epoch' + str(
         nb_epoch) + '_batch' + str(nb_batch)
     # print(f_log)
-    f_model = '/content/gdrive/My Drive/kawaseken/teratag/model' + shielding_material + 'freq' + str(
+    f_model = 'User/ryoya/kawaseken/teratag/model' + shielding_material + 'freq' + str(
         from_frequency) + 'to' + str(to_frequency) + 'num' + str(
         len(frequency_list)) + '/' + model_structure + '_lr' + str(learning_rate) + '/Adam_epoch' + str(
         nb_epoch) + '_batch' + str(nb_batch)
@@ -296,8 +301,8 @@ def keras_dnn(train_x, train_y, test_x, test_y,from_frequency, to_frequency, fre
         model.add(Dense(dense2, activation='relu', kernel_regularizer=regularizers.l2(regularizers_l2_2)))
         # model.add(Dropout(0.25))
         model.add(Dense(dense3, activation='relu', kernel_regularizer=regularizers.l2(regularizers_l2_3)))
-        model.add(Dense(dense4))
-
+        model.add(Dense(dense4, activation='linear'))
+        #model.add(Dense(dense4, activation=LeakyReLU()))
         model.summary()
         # optimizer には adam を指定
         adam = keras.optimizers.Adam(lr=learning_rate)
@@ -317,11 +322,11 @@ def keras_dnn(train_x, train_y, test_x, test_y,from_frequency, to_frequency, fre
         cbks = [es_cb, tb_cb]
         history = model.fit(train_x, train_y, batch_size=nb_batch, epochs=nb_epoch,
                             validation_data=(test_x, test_y), callbacks=cbks, verbose=1)
-        score = model.evaluate(test_x, test_y, verbose=0)
-        print('Test score:', score[0])
-        print('Test accuracy:', score[1])
         predict = model.predict(test_x)
-        # print('predict:{}'.format(predict))
+        print('元データ:{}'.format(test_y))
+        print('予想データ:{}'.format(predict))
+        print('決定係数:',r2_score(test_y,predict))
+        print('Mean absolute error 誤差率:',mean_absolute_error(test_y, predict))
         print('save the architecture of a model')
         json_string = model.to_json()
         open(os.path.join(f_model, 'tag_model.json'), 'w').write(json_string)
@@ -330,14 +335,6 @@ def keras_dnn(train_x, train_y, test_x, test_y,from_frequency, to_frequency, fre
         print('save weights')
         model.save_weights(os.path.join(f_model, 'tag_weights.hdf5'))
     KTF.set_session(old_session)
-
-    plt.plot(history.history['acc'])
-    plt.plot(history.history['val_acc'])
-    plt.title('model accuracy')
-    plt.xlabel('epoch')
-    plt.ylabel('accuracy')
-    plt.legend(['acc', 'val_acc'], loc='lower right')
-    plt.show()
 
     plt.plot(history.history['loss'])
     plt.plot(history.history['val_loss'])
@@ -353,12 +350,12 @@ def keras_dnn_predict(train_x, train_y, test_x, test_y,from_frequency, to_freque
     import keras.backend.tensorflow_backend as KTF
     import tensorflow as tf
     import keras
-    f_log = '/content/gdrive/My Drive/kawaseken/teratag/logs/fit' + shielding_material + 'freq' + str(
+    f_log = 'User/kawaseken/teratag/logs/fit' + shielding_material + 'freq' + str(
         from_frequency) + 'to' + str(to_frequency) + 'num' + str(
         len(frequency_list)) + '/' + model_structure + '_lr' + str(learning_rate) + '/Adam_epoch' + str(
         nb_epoch) + '_batch' + str(nb_batch)
     # print(f_log)
-    f_model = '/content/gdrive/My Drive/kawaseken/teratag/model' + shielding_material + 'freq' + str(
+    f_model = 'User/kawaseken/teratag/model' + shielding_material + 'freq' + str(
         from_frequency) + 'to' + str(to_frequency) + 'num' + str(
         len(frequency_list)) + '/' + model_structure + '_lr' + str(learning_rate) + '/Adam_epoch' + str(
         nb_epoch) + '_batch' + str(nb_batch)
@@ -375,10 +372,12 @@ def keras_dnn_predict(train_x, train_y, test_x, test_y,from_frequency, to_freque
 
         model.summary()
         adam = keras.optimizers.Adam(lr=learning_rate)
-        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+        model.compile(loss='mse', optimizer='adam')
 
         model.load_weights(os.path.join(f_model, weights_filename))
 
         cbks = []
         predict = model.predict(test_x)
+        print('元データ:{}'.format(test_y))
+        print('予想データ:{}'.format(predict))
     KTF.set_session(old_session)
