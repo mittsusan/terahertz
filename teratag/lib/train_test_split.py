@@ -89,7 +89,7 @@ def decide_test_number(x_all,y_all,test_number):
 def decide_test_number_multi_regressor(x_all,y_all,test_number):
     train_y = []
     test_y = []
-    y_save = 99999
+    y_save = np.array([np.zeros(3)])
     #flagを使って、np.appendのための空の行列をなんとかしている
     flag_train = 0
     flag_test = 0
@@ -99,7 +99,7 @@ def decide_test_number_multi_regressor(x_all,y_all,test_number):
         #zipのせいでlistに戻ったので、ndarrayに変更
         i = np.array([i])
         j = np.array([j])
-        if y_save != j:
+        if (y_save == j).all() == False:
 
             number = 0
             # trainを追加するための処理
