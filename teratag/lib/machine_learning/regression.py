@@ -301,7 +301,7 @@ def keras_dnn(train_x, train_y, test_x, test_y,from_frequency, to_frequency, fre
         model.add(Dense(dense2, activation='relu', kernel_regularizer=regularizers.l2(regularizers_l2_2)))
         # model.add(Dropout(0.25))
         model.add(Dense(dense3, activation='relu', kernel_regularizer=regularizers.l2(regularizers_l2_3)))
-        model.add(Dense(dense4, activation='linear'))
+        model.add(Dense(dense4, activation='softmax'))
         #model.add(Dense(dense4, activation=LeakyReLU()))
         model.summary()
         # optimizer には adam を指定

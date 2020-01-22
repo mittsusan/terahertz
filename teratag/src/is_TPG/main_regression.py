@@ -47,11 +47,11 @@ for i in range(1,last_type+1):
     for concentration in range(1, concentration_pattern+1):
         y = np.zeros(last_type)
         if i == last_type:
-            y[i - 1] = 100 - 20 * (concentration - 1)
-            y[0] = 0 + 20 * (concentration - 1)
+            y[i - 1] = (100 - 20 * (concentration - 1))*0.01
+            y[0] = 0 + (20 * (concentration - 1))*0.01
         else:
-            y[i - 1] = 100 - 20 * (concentration - 1)
-            y[i] = 0 + 20 * (concentration - 1)
+            y[i - 1] = (100 - 20 * (concentration - 1))*0.01
+            y[i] = 0 + (20 * (concentration - 1)*0.01)
         y = np.array([y])
 
         for j in range(1,last_num+1):

@@ -1,6 +1,6 @@
 import numpy as np
 
-def train_test_split(x_all_2,y_all,train_number):
+def train_test_split_madebymitsuhashi(x_all_2,y_all,train_number):
     train_y = []
     test_y = []
     y_save = 99999

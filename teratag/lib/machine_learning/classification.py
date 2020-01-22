@@ -212,22 +212,46 @@ def pCA(x_all, y_all,number,file_name_list):
         for index, (item, file_name) in enumerate(zip(targets, file_name_list)): #ファイル名も表記する。
             if item == 1:
                 plt.scatter(transformed[index, 0],
-                            transformed[index, 1], marker="${}$".format(file_name), c ='blue')
+                            transformed[index, 1], marker="${}$".format(file_name), c ='red')
             elif item == 2:
                 plt.scatter(transformed[index, 0],
-                            transformed[index, 1], marker="${}$".format(file_name), c ='orange')
+                            transformed[index, 1], marker="${}$".format(file_name), c ='#%02X%02X%02X' % (0,255,0))
 
             elif item == 3:
                 plt.scatter(transformed[index, 0],
-                            transformed[index, 1], marker="${}$".format(file_name), c ='green')
+                            transformed[index, 1], marker="${}$".format(file_name), c ='blue')
             elif item == 4:
                 plt.scatter(transformed[index, 0],
-                            transformed[index, 1], marker="${}$".format(file_name), c ='red')
+                            transformed[index, 1], marker="${}$".format(file_name), c ='#%02X%02X%02X' % (255,215,0))
 
         plt.xlabel('pc1',fontsize=28)
         plt.ylabel('pc2',fontsize=28)
-        plt.legend(loc='best',fontsize=16)
-        #plt.yticks([-1.0, -0.5, 0.0, 0.5, 1.0])
+        #plt.legend(loc='best',fontsize=16)
+        #plt.xticks([-10, -5, 0, 5, 10])
+        #plt.yticks([-10, -5, 0, 5, 10])
+        plt.tick_params(labelsize=24)
+        plt.show()
+
+        for index, (item, file_name) in enumerate(zip(targets, file_name_list)): #ファイル名も表記する。
+            if item == 1:
+                plt.scatter(transformed[index, 0],
+                            transformed[index, 1], marker="o", c ='red')
+            elif item == 2:
+                plt.scatter(transformed[index, 0],
+                            transformed[index, 1], marker="o", c ='#%02X%02X%02X' % (0,255,0))
+
+            elif item == 3:
+                plt.scatter(transformed[index, 0],
+                            transformed[index, 1], marker="o", c ='blue')
+            elif item == 4:
+                plt.scatter(transformed[index, 0],
+                            transformed[index, 1], marker="o", c ='#%02X%02X%02X' % (255,215,0))
+
+        plt.xlabel('pc1',fontsize=28)
+        plt.ylabel('pc2',fontsize=28)
+        #plt.legend(loc='best',fontsize=16)
+        #plt.xticks([-10, -5, 0, 5, 10])
+        #plt.yticks([-10, -5, 0, 5, 10])
         plt.tick_params(labelsize=24)
         plt.show()
 
@@ -310,6 +334,34 @@ def pCA(x_all, y_all,number,file_name_list):
         plt.xlabel('pc1', fontsize=28)
         plt.ylabel('pc2', fontsize=28)
         #plt.xticks([-2, -1, -0, 0, 1, 2])
+        #plt.yticks([-0.75, -0.5, -0.25, 0.00, 0.25, 0.5, 0.75])
+        plt.legend(loc='best', fontsize=16)
+        plt.tick_params(labelsize=24)
+        plt.show()
+
+        for index, (item, file_name) in enumerate(zip(targets, file_name_list)):  # ファイル名も表記する。
+            if item == 1:
+                plt.scatter(transformed[index, 0],
+                            transformed[index, 1], marker="o", c='red')
+            elif item == 2:
+                plt.scatter(transformed[index, 0],
+                            transformed[index, 1], marker="o", c='#%02X%02X%02X' % (0, 255, 0))
+
+            elif item == 3:
+                plt.scatter(transformed[index, 0],
+                            transformed[index, 1], marker="o", c='blue')
+            elif item == 4:
+                plt.scatter(transformed[index, 0],
+                            transformed[index, 1], marker="o", c='#%02X%02X%02X' % (255, 215, 0))
+            elif item == 5:
+                plt.scatter(transformed[index, 0],
+                            transformed[index, 1], marker="o", c='#%02X%02X%02X' % (255, 0, 255))
+            elif item == 6:
+                plt.scatter(transformed[index, 0],
+                            transformed[index, 1], marker="o", c='#%02X%02X%02X' % (0, 255, 255))
+        plt.xlabel('pc1', fontsize=28)
+        plt.ylabel('pc2', fontsize=28)
+        plt.xticks([-6, -4, -2, 0, 2, 4, 6])
         #plt.yticks([-0.75, -0.5, -0.25, 0.00, 0.25, 0.5, 0.75])
         plt.legend(loc='best', fontsize=16)
         plt.tick_params(labelsize=24)
