@@ -1,29 +1,15 @@
-## テラヘルツ波を用いた識別タグに関する研究
+# 機械学習を用いたテラヘルツタグ識別に関する研究
 
 ### Overview
 
-テラヘルツタグに関する機械学習による解析手法を書いています。  
-可視化には可視光域で用いられているカラーコード手法を用いています。  
+I write a machine learning identification method for terahertz tags.  
+The identification method uses **SVM, KNN, PCA-SVM, and DNN**.  
+We use the color code method used in the visible light range to visualize whether tag identification has been achieved.  
+テラヘルツタグに関する機械学習による識別手法を書いています。   
+識別手法は**SVM,KNN,PCA-SVM,DNN**を用いています。  
+タグ識別が出来ているのかを可視化するために可視光域で用いられているカラーコード手法を用いています。  
 
-### 変更点
-2018/12/06  
-・SVM,kNN,PCA-SVM,SVRのプログラムを作成。  
 
-2019/1/11  
-・developブランチにallreadの楽なものを作成。  
-
-2019/1/30  
-・teratagディレクトリに分類用のjupyter notebookファイルをpythonファイルに以降。  
-・trainデータとtestデータの分割を数で分ける関数を作成。  
-・時間領域の強度での識別に対応(TDS)。  
-
-2019/2/4  
-・is-TPGのファイルにも対応。  
-・グラフ化機能を追加。  
-・PCAを修復(int型を代入するようにした。)  
-・min-max-normalizationにも対応。  
-・周波数の選択機能を追加。  
-・カラーコード可視化機能を修正。    
-  
-これ以降はコミットメッセージ参照してください。
-
+["Terahertz tag identifiable through shielding materials using machine learning"](https://doi.org/10.1364/OE.384195)  
+Please refer to the paper for details  
+詳細な内容は論文を参照してください
