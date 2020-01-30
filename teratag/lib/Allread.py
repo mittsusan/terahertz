@@ -18,7 +18,7 @@ sample_init = 0
 
 class allread:
 
-    def __init__(self,method = 0,thickness = '1.0mm',type = 3,sample = 3,last_type = 3,last_num = 3,first = 0.8,last = 2.6,frequency_list = []):
+    def __init__(self,method = 0,type = 3,sample = 3,last_type = 3,last_num = 3,first = 0.8,last = 2.6,frequency_list = []):
         #self.df = pd.read_table(file, engine='python')
         #self.file = file
         if method == 0:
@@ -28,8 +28,8 @@ class allread:
         elif method == 2:
             y_axis = 'Reflectance'
         self.method = y_axis
-        self.thickness = thickness
         self.type = type
+        self.thickness = str(type)
         self.sample = sample
         self.last_type = last_type
         self.last_num = last_num
@@ -195,9 +195,9 @@ class allread:
         #self.df = change_db(self.df)
         #self.graph_Frequency_trans_reflect_is_TPG()
 
-        self.spline2(800)#補間曲線を作成
+        #self.spline2(800)#補間曲線を作成
 
-        self.graph_Frequency_trans_reflect_is_TPG_everymm('Frequency (THz)',self.method)
+        #self.graph_Frequency_trans_reflect_is_TPG_everymm('Frequency (THz)',self.method)
 
         #print(self.df)
         for j in self.df.iloc[:,0]:
@@ -318,7 +318,7 @@ class allread:
             df.plot(colormap='tab20',legend=None)
             plt.xlabel(x,fontsize = 28)
             plt.ylabel(y,fontsize = 28)
-            plt.xticks([0.8,1.0,1.2,1.4,1.6])
+            #plt.xticks([0.9,1.0,1.1,1.2,1.3,1.4,1.5,1.6])
             plt.title(self.type-1)
             plt.tick_params(labelsize=24)
             #plt.legend(fontsize=10)
@@ -339,7 +339,7 @@ class allread:
             df.plot(colormap='tab20',legend=None)
             plt.xlabel(x,fontsize = 28)
             plt.ylabel(y,fontsize = 28)
-            plt.xticks([0.8, 1.0, 1.2, 1.4, 1.6])
+            #plt.xticks([0.9,1.0,1.1,1.2,1.3,1.4,1.5,1.6])
             plt.tick_params(labelsize=24)
             #plt.legend(fontsize=10)
             plt.title(self.type)

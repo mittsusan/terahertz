@@ -13,6 +13,14 @@ from sklearn.ensemble import RandomForestClassifier
 import numpy as np
 import pandas as pd
 from sklearn.naive_bayes import GaussianNB # ガウシアン
+import datetime
+import tensorflow as tf
+import keras
+from keras.layers import Dense,Activation,Dropout,Flatten
+from keras.layers.convolutional import Conv1D, UpSampling1D
+import keras.backend.tensorflow_backend as KTF
+from keras import regularizers
+import os
 
 def gaussiannb(train_x, train_y, test_x, test_y):
     gnb = GaussianNB()
@@ -181,12 +189,9 @@ def kNN(train_x, train_y, test_x, test_y):
     return pred_y
 
 
-def pCA(x_all, y_all,number,file_name_list):
-    # 主成分分析する
-    #index_num = 1
+def pCA(x_all, y_all, number, file_name_list, type_name_list, concentration_color_type):
     features = x_all
     targets = y_all
-    types = np.unique(targets)
     pca = PCA(n_components=2)
     pca.fit(features)
     # 分析結果を元にデータセットを主成分に変換する
@@ -203,88 +208,81 @@ def pCA(x_all, y_all,number,file_name_list):
                         transformed[targets == label, 1], label='{}mm'.format(label*0.5))
         plt.xlabel('pc1',fontsize=28)
         plt.ylabel('pc2',fontsize=28)
-        #plt.legend(loc= 'best',fontsize=16)
-        plt.yticks([-1.0,-0.5,0.0,0.5,1.0])
+        plt.legend(loc= 'best',fontsize=16)
+        #plt.yticks([-1.0,-0.5,0.0,0.5,1.0])
         plt.tick_params(labelsize=24)
-        #plt.legend(bbox_to_anchor=(1, 0), loc='lower right', borderaxespad=1)
+        plt.legend(bbox_to_anchor=(1, 0), loc='lower right', borderaxespad=1)
         plt.show()
 
         for index, (item, file_name) in enumerate(zip(targets, file_name_list)): #ファイル名も表記する。
             if item == 1:
                 plt.scatter(transformed[index, 0],
-                            transformed[index, 1], marker="${}$".format(file_name), c ='blue')
-            if item == 2:
+                            transformed[index, 1], marker="${}$".format(file_name), c ='red')
+            elif item == 2:
                 plt.scatter(transformed[index, 0],
-                            transformed[index, 1], marker="${}$".format(file_name), c ='orange')
+                            transformed[index, 1], marker="${}$".format(file_name), c ='#%02X%02X%02X' % (0,255,0))
 
             elif item == 3:
                 plt.scatter(transformed[index, 0],
-                            transformed[index, 1], marker="${}$".format(file_name), c ='green')
+                            transformed[index, 1], marker="${}$".format(file_name), c ='blue')
             elif item == 4:
                 plt.scatter(transformed[index, 0],
-                            transformed[index, 1], marker="${}$".format(file_name), c ='red')
+                            transformed[index, 1], marker="${}$".format(file_name), c ='#%02X%02X%02X' % (255,215,0))
+
         plt.xlabel('pc1',fontsize=28)
         plt.ylabel('pc2',fontsize=28)
         #plt.legend(loc='best',fontsize=16)
-        plt.yticks([-1.0, -0.5, 0.0, 0.5, 1.0])
+        #plt.xticks([-10, -5, 0, 5, 10])
+        #plt.yticks([-10, -5, 0, 5, 10])
         plt.tick_params(labelsize=24)
         plt.show()
 
-    else: #糖類の場合
-        for label in np.unique(targets):
-            if label == 1:
-                plt.scatter(transformed[targets == label, 0],
-                            transformed[targets == label, 1], label='A')
-            elif label == 2:
-                plt.scatter(transformed[targets == label, 0],
-                            transformed[targets == label, 1], label='B')
-            elif label == 3:
-                plt.scatter(transformed[targets == label, 0],
-                            transformed[targets == label, 1], label='C')
-            elif label == 4:
-                plt.scatter(transformed[targets == label, 0],
-                            transformed[targets == label, 1], label='A & B')
-            elif label == 5:
-                plt.scatter(transformed[targets == label, 0],
-                            transformed[targets == label, 1], label='B & C')
-            elif label == 6:
-                plt.scatter(transformed[targets == label, 0],
-                            transformed[targets == label, 1], label='C & A')
-            elif label == 7:
-                plt.scatter(transformed[targets == label, 0],
-                            transformed[targets == label, 1], label='Glu_Lac_Mal')
+        for index, (item, file_name) in enumerate(zip(targets, file_name_list)): #ファイル名も表記する。
+            if item == 1:
+                plt.scatter(transformed[index, 0],
+                            transformed[index, 1], marker="o", c ='red')
+            elif item == 2:
+                plt.scatter(transformed[index, 0],
+                            transformed[index, 1], marker="o", c ='#%02X%02X%02X' % (0,255,0))
+
+            elif item == 3:
+                plt.scatter(transformed[index, 0],
+                            transformed[index, 1], marker="o", c ='blue')
+            elif item == 4:
+                plt.scatter(transformed[index, 0],
+                            transformed[index, 1], marker="o", c ='#%02X%02X%02X' % (255,215,0))
+
+        plt.xlabel('pc1',fontsize=28)
+        plt.ylabel('pc2',fontsize=28)
+        #plt.legend(loc='best',fontsize=16)
+        #plt.xticks([-10, -5, 0, 5, 10])
+        #plt.yticks([-10, -5, 0, 5, 10])
+        plt.tick_params(labelsize=24)
+        plt.show()
+
+    else: #試薬の場合
+
+        for label, name, concentration_color in zip(np.unique(targets), type_name_list, concentration_color_type):
+            plt.scatter(transformed[targets == label, 0],
+                        transformed[targets == label, 1], label=name, c = '#%02X%02X%02X' % (concentration_color[0],concentration_color[1],concentration_color[2]))
+
         plt.xlabel('pc1', fontsize=28)
         plt.ylabel('pc2', fontsize=28)
-        plt.xticks([-2, -1, -0, 0, 1, 2])
-        plt.yticks([-0.75, -0.5, -0.25, 0.00, 0.25, 0.5, 0.75])
-        #plt.legend(loc='best',fontsize=16)
+        #plt.xticks([-2, -1, -0, 0, 1, 2])
+        #plt.yticks([-0.75, -0.5, -0.25, 0.00, 0.25, 0.5, 0.75])
+        #plt.subplots_adjust(left=0.1, right=0.4, bottom=0.2, top=0.95)
+        #plt.legend(loc='best', borderaxespad=0,bbox_to_anchor=(1.05, 1),fontsize=10,ncol=1)
         plt.tick_params(labelsize=24)
         plt.show()
 
         for index, (item, file_name) in enumerate(zip(targets, file_name_list)):  # ファイル名も表記する。
-            if item == 1:
-                plt.scatter(transformed[index, 0],
-                            transformed[index, 1], marker="${}$".format(file_name), c='blue')
-            if item == 2:
-                plt.scatter(transformed[index, 0],
-                            transformed[index, 1], marker="${}$".format(file_name), c='orange')
+            plt.scatter(transformed[index, 0],
+                        transformed[index, 1], marker="${}$".format(file_name), c='red')
 
-            elif item == 3:
-                plt.scatter(transformed[index, 0],
-                            transformed[index, 1], marker="${}$".format(file_name), c='green')
-            elif item == 4:
-                plt.scatter(transformed[index, 0],
-                            transformed[index, 1], marker="${}$".format(file_name), c='red')
-            elif item == 5:
-                plt.scatter(transformed[index, 0],
-                            transformed[index, 1], marker="${}$".format(file_name), c='purple')
-            elif item == 6:
-                plt.scatter(transformed[index, 0],
-                            transformed[index, 1], marker="${}$".format(file_name), c='brown')
         plt.xlabel('pc1', fontsize=28)
         plt.ylabel('pc2', fontsize=28)
-        plt.xticks([-2, -1, -0, 0, 1, 2])
-        plt.yticks([-0.75, -0.5, -0.25, 0.00, 0.25, 0.5, 0.75])
+        #plt.xticks([-2, -1, -0, 0, 1, 2])
+        #plt.yticks([-0.75, -0.5, -0.25, 0.00, 0.25, 0.5, 0.75])
         #plt.legend(loc='best', fontsize=16)
         plt.tick_params(labelsize=24)
         plt.show()
@@ -324,10 +322,6 @@ def iCA(x_all, y_all):
 
     return S, y_all
 
-#def RF(train_x,train_y):
-
-
-#
 def smirnov_grubbs(data, alpha):
     x, o = list(data), []
     while True:
@@ -340,4 +334,110 @@ def smirnov_grubbs(data, alpha):
         tau_far = np.abs((x[i_far] - myu) / std)
         if tau_far < tau: break
         o.append(x.pop(i_far))
-    return (np.array(x), np.array(o))
+    return np.array(x), np.array(o)
+
+
+def dnn_classification(train_x, train_y, test_x, test_y, class_number, base_dir, from_frequency, to_frequency, frequency_list):
+    # conv1 = 30
+    nb_epoch = 10000
+    nb_batch = 32
+    learning_rate = 1e-2
+    try:  ##convolutionを使う場合
+        conv1
+
+        train_x.resize(train_x.shape[0], train_x.shape[1], 1)
+        test_x.resize(test_x.shape[0], test_x.shape[1], 1)
+    except:
+        pass
+
+    dense1 = 60
+    dense2 = 30
+    dense3 = 14
+    dense4 = class_number
+    regularizers_l2_1 = 0
+    regularizers_l2_2 = 0
+    regularizers_l2_3 = 0
+
+    try:
+        model_structure = 'conv{0}relu_{1}relul2{2}_{3}relul2{4}_{5}relul2{6}_{7}softmax'.format(conv1, dense1,
+                                                                                                 regularizers_l2_1,
+                                                                                                 dense2,
+                                                                                                 regularizers_l2_2,
+                                                                                                 dense3,
+                                                                                                 regularizers_l2_3,
+                                                                                                 dense4)
+    except:
+        model_structure = '{0}relul2{1}_{2}relul2{3}_{4}relul2{5}_{6}softmax'.format(dense1, regularizers_l2_1, dense2,
+                                                                                     regularizers_l2_2, dense3,
+                                                                                     regularizers_l2_3, dense4)
+    f_log = base_dir + '/logs/fit' + 'freq' + str(
+        from_frequency) + 'to' + str(to_frequency) + 'num' + str(
+        len(frequency_list)) + '/' + model_structure + '_lr' + str(learning_rate) + '/Adam_epoch' + str(
+        nb_epoch) + '_batch' + str(nb_batch)
+    # print(f_log)
+    f_model = base_dir + '/model'  + 'freq' + str(
+        from_frequency) + 'to' + str(to_frequency) + 'num' + str(
+        len(frequency_list)) + '/' + model_structure + '_lr' + str(learning_rate) + '/Adam_epoch' + str(
+        nb_epoch) + '_batch' + str(nb_batch)
+    os.makedirs(f_model, exist_ok=True)
+    # ニュートラルネットワークで使用するモデル作成
+    old_session = KTF.get_session()
+    with tf.Graph().as_default():
+        session = tf.Session('')
+        KTF.set_session(session)
+        KTF.set_learning_phase(1)
+        model = keras.models.Sequential()
+        try:
+            model.add(Conv1D(conv1, 4, padding='same', input_shape=(train_x.shape[1:]), activation='relu'))
+            model.add(Flatten())
+            model.add(Dense(dense1, activation='relu', kernel_regularizer=regularizers.l2(regularizers_l2_1)))
+        except:
+            model.add(Dense(dense1, activation='relu', kernel_regularizer=regularizers.l2(regularizers_l2_1),
+                            input_shape=(train_x.shape[1:])))
+
+        # model.add(Dropout(0.25))
+        model.add(Dense(dense2, activation='relu', kernel_regularizer=regularizers.l2(regularizers_l2_2)))
+        # model.add(Dropout(0.25))
+        model.add(Dense(dense3, activation='relu', kernel_regularizer=regularizers.l2(regularizers_l2_3)))
+        model.add(Dense(dense4, activation='softmax'))
+
+        model.summary()
+        # optimizer には adam を指定
+        adam = keras.optimizers.Adam(lr=learning_rate)
+
+        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+        # model.compile(loss='sparse_categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
+
+        train_y = np.array(train_y)
+        test_y = np.array(test_y)
+        # print(test_y)
+        # print(test_y.shape)
+        # print(type(test_y))
+        es_cb = keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=1000, verbose=0, mode='auto')
+        tb_cb = keras.callbacks.TensorBoard(log_dir=f_log, histogram_freq=1)
+        # cp_cb = keras.callbacks.ModelCheckpoint(filepath = os.path.join(f_model,'tag_model{epoch:02d}-loss{loss:.2f}-acc{acc:.2f}-vloss{val_loss:.2f}-vacc{val_acc:.2f}.hdf5'), monitor='val_loss', verbose=1, save_best_only=True, mode='auto')
+        # cbks = [es_cb, tb_cb, cp_cb]
+        cbks = [es_cb, tb_cb]
+        history = model.fit(train_x, train_y, batch_size=nb_batch, epochs=nb_epoch,
+                            validation_data=(test_x, test_y), callbacks=cbks, verbose=1)
+        score = model.evaluate(test_x, test_y, verbose=0)
+        print('Test score:', score[0])
+        print('Test accuracy:', score[1])
+        predict = model.predict(test_x)
+        # print('predict:{}'.format(predict))
+        print('save the architecture of a model')
+        json_string = model.to_json()
+        open(os.path.join(f_model, 'tag_model.json'), 'w').write(json_string)
+        yaml_string = model.to_yaml()
+        open(os.path.join(f_model, 'tag_model.yaml'), 'w').write(yaml_string)
+        print('save weights')
+        model.save_weights(os.path.join(f_model, 'tag_weights.hdf5'))
+    KTF.set_session(old_session)
+    best_pred = []
+    probability = []
+    category = np.arange(1, class_number+1)
+    for (i, pre) in enumerate(predict):
+        y = pre.argmax()  # preがそれぞれの予測確率で一番高いものを取ってきている。Y_testはone-hotベクトル
+        best_pred.append(category[y])
+        probability.append(pre[y])
+    return best_pred, probability
